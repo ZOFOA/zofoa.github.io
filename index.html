@@ -520,10 +520,14 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .option-item { padding: 8px 10px; font-size: 14px; line-height: 1.4; gap: 6px; }
   .option-label { min-width: 28px; height: 28px; line-height: 28px; font-size: 12px; }
   /* 手机端禁用option hover（触控会粘滞），覆盖护眼/夜间模式 */
-  .option-item:hover { border-color: #e8ecf1 !important; background: transparent !important; }
-  body.eye-protect .option-item:hover { border-color: #9ec5a4 !important; background: transparent !important; }
-  body.night-mode .option-item:hover { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; }
+  .option-item:hover { border-color: #e8ecf1; background: transparent; }
+  body.eye-protect .option-item:hover { border-color: #9ec5a4; background: transparent; }
+  body.night-mode .option-item:hover { border-color: rgba(255,255,255,0.08); background: transparent; }
   .option-item:active { border-color: #1a6ff5; background: #eef4ff; }
+  /* 确保选中/对错状态不受hover影响 */
+  .option-item.selected { border-color: #1a6ff5 !important; background: #eef4ff !important; }
+  .option-item.correct { border-color: #10b981 !important; background: #ecfdf5 !important; }
+  .option-item.wrong { border-color: #e74c3c !important; background: #fef2f2 !important; }
   /* 紧凑布局 */
   .practice-main { margin-top: 4px !important; }
   .exam-main { margin-top: 4px !important; }
