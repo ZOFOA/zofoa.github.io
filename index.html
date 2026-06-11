@@ -5380,29 +5380,39 @@ async function startWrongBookPractice() {
         track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
         track.style.transform = 'translateX(' + (baseX - w) + 'px)';
         var fn = m.goNext;
+        var _track = track;
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
-          setTimeout(destroy, 500);
+          // 延迟清理：只有轨道还在DOM中且未被新滑动替换时才删除
+          setTimeout(function() {
+            if (_track && _track.parentNode) _track.parentNode.removeChild(_track);
+            if (track === _track) { track = null; swiping = false; }
+          }, 500);
         }, 310);
       } else if (Math.abs(dx) > THRESHOLD && dx > 0 && m && m.idx > 0) {
         // 上一题
         track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
         track.style.transform = 'translateX(' + (baseX + w) + 'px)';
         var fn = m.goPrev;
+        var _track = track;
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
-          setTimeout(destroy, 500);
+          setTimeout(function() {
+            if (_track && _track.parentNode) _track.parentNode.removeChild(_track);
+            if (track === _track) { track = null; swiping = false; }
+          }, 500);
         }, 310);
       } else {
         // 弹回原位 → 复原单卡片
         track.style.transition = 'transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94)';
         track.style.transform = 'translateX(' + baseX + 'px)';
+        var _track = track;
         timer = setTimeout(function() {
-          // 弹回后把卡片移出轨道，恢复原状
-          if (cardRef && track && track.parentNode) {
+          if (cardRef && _track && _track.parentNode) {
             areaEl.appendChild(cardRef);
           }
-          destroy();
+          if (_track && _track.parentNode) _track.parentNode.removeChild(_track);
+          if (track === _track) { track = null; swiping = false; }
         }, 260);
       }
     }, { passive: true });
