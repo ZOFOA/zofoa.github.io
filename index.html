@@ -437,7 +437,6 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   }
   
   /* 内容区域 */
-  .container { padding: 10px; }
   .card { padding: 12px; }
   
   /* 刷题容器 */
@@ -509,7 +508,6 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 隐藏头部导航（手机端由侧滑菜单替代） */
   .header-nav { display: none !important; }
   /* 手机端卡片占满宽度、最小化边距 */
-  .container { padding: 0; }
   .main { padding: 0; }
   .card { padding: 10px; }
   .question-card { padding: 12px 10px; border-radius: 6px; margin-bottom: 8px; }
@@ -518,16 +516,27 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .option-list { gap: 6px; }
   /* 选项：紧凑触控区域，禁止hover粘滞 */
   .option-item { padding: 8px 10px; font-size: 14px; line-height: 1.4; gap: 6px; }
-  .option-label { min-width: 28px; height: 28px; line-height: 28px; font-size: 12px; }
+  .option-label { min-width: 28px; height: 28px; font-size: 12px; }
   /* 手机端禁用option hover（触控会粘滞），覆盖护眼/夜间模式 */
-  .option-item:hover { border-color: #e8ecf1; background: transparent; }
-  body.eye-protect .option-item:hover { border-color: #9ec5a4; background: transparent; }
-  body.night-mode .option-item:hover { border-color: rgba(255,255,255,0.08); background: transparent; }
-  .option-item:active { border-color: #1a6ff5; background: #eef4ff; }
-  /* 确保选中/对错状态不受hover影响 */
-  .option-item.selected { border-color: #1a6ff5 !important; background: #eef4ff !important; }
-  .option-item.correct { border-color: #10b981 !important; background: #ecfdf5 !important; }
-  .option-item.wrong { border-color: #e74c3c !important; background: #fef2f2 !important; }
+  .option-item:hover { border-color: #e8ecf1 !important; background: transparent !important; }
+  body.eye-protect .option-item:hover { border-color: #9ec5a4 !important; background: transparent !important; }
+  body.night-mode .option-item:hover { border-color: rgba(255,255,255,0.08) !important; background: #2c2c2e !important; }
+  /* 确保选中/对错状态不受hover/active影响（默认+护眼） */
+  .option-item.selected, body.eye-protect .option-item.selected { border-color: #1a6ff5 !important; background: #eef4ff !important; }
+  .option-item.correct, body.eye-protect .option-item.correct { border-color: #10b981 !important; background: #ecfdf5 !important; }
+  .option-item.wrong, body.eye-protect .option-item.wrong { border-color: #e74c3c !important; background: #fef2f2 !important; }
+  /* 夜间模式保持iOS风格 */
+  body.night-mode .option-item.selected { border-color: #0a84ff !important; background: rgba(10,132,255,0.2) !important; color: #fff !important; }
+  body.night-mode .option-item.correct { border-color: #30d158 !important; background: rgba(48,209,88,0.2) !important; color: #fff !important; }
+  body.night-mode .option-item.wrong { border-color: #ff453a !important; background: rgba(255,69,58,0.2) !important; color: #fff !important; }
+  /* 手机端 :active 边框与默认一致，视觉零变化，杜绝"半选中" */
+  .option-item:active { border-color: #e8ecf1 !important; background: transparent !important; }
+  body.eye-protect .option-item:active { border-color: #9ec5a4 !important; background: transparent !important; }
+  body.night-mode .option-item:active { border-color: rgba(255,255,255,0.08) !important; background: #2c2c2e !important; }
+  .option-item.selected:active { border-color: #1a6ff5 !important; background: #eef4ff !important; }
+  /* 彻底禁止移动端所有残留交互状态 */
+  .option-item { -webkit-tap-highlight-color: transparent; outline: none; }
+  .option-item:focus { outline: none; box-shadow: none; }
   /* 紧凑布局 */
   .practice-main { margin-top: 4px !important; }
   .exam-main { margin-top: 4px !important; }
@@ -609,13 +618,12 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   
   /* 选项按钮增大触控区域 */
   .option-item { padding: 12px 14px; font-size: 16px; }
-  .option-label { min-width: 32px; height: 32px; line-height: 32px; font-size: 14px; }
+  .option-label { min-width: 32px; height: 32px; font-size: 14px; }
   
   /* 考试按钮 */
   .exam-timer { font-size: 14px; }
   
   /* 间隔缩小 */
-  .mt-16 { margin-top: 10px; }
   .mt-12 { margin-top: 8px; }
   /* 首页手机优化 */
   .stat-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
@@ -721,12 +729,14 @@ body.night-mode .question-meta { color: rgba(255,255,255,0.5); }
 body.night-mode .option-item { background: #2c2c2e; border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
 body.night-mode .option-item:hover { background: #3a3a3c; border-color: rgba(255,255,255,0.15); }
 body.night-mode .option-item:active { background: #3a3a3c; border-color: #0a84ff; }
-body.night-mode .option-item.selected { background: rgba(10,132,255,0.15); border-color: #0a84ff; }
-body.night-mode .option-item.correct { background: rgba(48,209,88,0.15); border-color: #30d158; }
-body.night-mode .option-item.wrong { background: rgba(255,69,58,0.15); border-color: #ff453a; }
+body.night-mode .option-item.selected { background: rgba(10,132,255,0.2); border-color: #0a84ff; color: #fff; }
+body.night-mode .option-item.correct { background: rgba(48,209,88,0.2); border-color: #30d158; color: #fff; }
+body.night-mode .option-item.wrong { background: rgba(255,69,58,0.2); border-color: #ff453a; color: #fff; }
+body.night-mode .text-green { color: #30d158 !important; }
+body.night-mode .text-red { color: #ff453a !important; }
 body.night-mode .option-label { background: #3a3a3c; color: rgba(255,255,255,0.6); }
 body.night-mode .option-item.selected .option-label { background: #0a84ff; color: #fff; }
-body.night-mode .analysis-box { background: #2c2c2e; color: rgba(255,255,255,0.7); border-left-color: rgba(255,255,255,0.2); }
+body.night-mode .analysis-box { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); border-left-color: rgba(255,255,255,0.2); }
 body.night-mode .bottom-nav-bar { background: #1c1c1e; border-top-color: rgba(255,255,255,0.08); }
 body.night-mode .btn-outline { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.12); }
 body.night-mode .btn-outline:hover { background: #3a3a3c; color: #fff; border-color: rgba(255,255,255,0.2); }
@@ -779,10 +789,6 @@ body.night-mode .exam-record-num.current { background: #0a84ff; color: #fff; }
 body.night-mode .exam-record-num.correct { background: rgba(48,209,88,0.25); color: #30d158; }
 body.night-mode .exam-record-num.wrong { background: rgba(255,69,58,0.25); color: #ff453a; }
 body.night-mode .progress-bar { background: #3a3a3c; }
-body.night-mode .header-nav { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.08); }
-body.night-mode .header-nav button { color: rgba(255,255,255,0.5); }
-body.night-mode .header-nav button.active { color: #0a84ff; border-bottom-color: #0a84ff; }
-body.night-mode .header-nav button:hover { color: rgba(255,255,255,0.87); }
 body.night-mode .toast { background: #3a3a3c !important; color: rgba(255,255,255,0.92) !important; }
 body.night-mode .empty { color: rgba(255,255,255,0.3); }
 body.night-mode .eye-toggle-btn { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
@@ -2076,7 +2082,7 @@ async function importAllData() {
             if (data.current_exam) parts.push(`进行中考试状态`);
             showToast(successMsg + parts.join('，'));
             renderDashboard();
-            renderCustomCollections();
+            getAllQuestions().then(function(all) { renderCustomCollections(all); }).catch(function() {});
           } catch (err) {
             console.error('导入过程出错:', err);
             showToast('❌ 导入失败：' + err.message);
@@ -3445,6 +3451,8 @@ let practiceAutoAdvanceTimer = null; // 答对自动跳转定时器
 let practiceNavigating = false; // 防止快速导航导致并发渲染
 
 function practiceSelectOption(el, label) {
+  // 忽略滑动后的 ghost click
+  if (window._justSwiped) return;
   const submitBtn = document.getElementById('practice-submit-btn');
   // 已提交答案后禁止修改
   if ((submitBtn && submitBtn.disabled) || practiceResultsMap[practiceQuestions[practiceIndex]?.id]) return;
@@ -4146,6 +4154,7 @@ async function renderExamQuestion() {
 }
 
 function examSelectOption(el, label) {
+  if (window._justSwiped) return;
   const isMultiple = el.dataset.multiple === 'true';
   const q = examQuestions[examCurrentIndex];
   let current = new Set((examAnswers[q.id] || '').split('').filter(Boolean));
@@ -5271,7 +5280,7 @@ async function startWrongBookPractice() {
 
   // 手机/平板左右滑动切换题目（并排卡片滑动）
   (function setupSwipe() {
-    var startX = 0, startY = 0, swiping = false, busy = false;
+    var startX = 0, startY = 0, swiping = false, busy = false, justSwiped = false;
     var track = null, areaEl = null, cardRef = null;
     var baseX = 0, timer = null;
     var THRESHOLD = 60;
@@ -5310,7 +5319,7 @@ async function startWrongBookPractice() {
     function createTrack(card, m) {
       var w = areaEl.offsetWidth || window.innerWidth;
       track = document.createElement('div');
-      track.style.cssText = 'display:flex;width:100%;';
+      track.style.cssText = 'display:flex;width:100%;pointer-events:none;';
       var slot = 0;
       if (m.idx > 0) {
         var pd = document.createElement('div'); pd.style.cssText = 'width:100%;flex-shrink:0;';
@@ -5369,6 +5378,7 @@ async function startWrongBookPractice() {
 
     document.addEventListener('touchend', function(e) {
       if (!swiping || !track) { cardRef = null; return; }
+      e.preventDefault(); // 阻止 ghost click 误选中选项
       var ct = e.changedTouches[0] || (e.changedTouches && e.changedTouches.item(0));
       if (!ct) { destroy(); return; }
       var dx = ct.clientX - startX;
@@ -5384,8 +5394,8 @@ async function startWrongBookPractice() {
         var _track = track;
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
-          busy = false; // 导航函数已调用，允许下次滑动（innerHTML会自然替换旧轨道）
-          // 延迟清理：只有轨道还在DOM中且未被新滑动替换时才删除
+          busy = false;
+          window._justSwiped = true; setTimeout(function() { window._justSwiped = false; }, 400);
           setTimeout(function() {
             if (_track && _track.parentNode) _track.parentNode.removeChild(_track);
             if (track === _track) { track = null; swiping = false; }
@@ -5401,6 +5411,7 @@ async function startWrongBookPractice() {
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
           busy = false;
+          window._justSwiped = true; setTimeout(function() { window._justSwiped = false; }, 400);
           setTimeout(function() {
             if (_track && _track.parentNode) _track.parentNode.removeChild(_track);
             if (track === _track) { track = null; swiping = false; }
@@ -5419,7 +5430,7 @@ async function startWrongBookPractice() {
           if (track === _track) { track = null; swiping = false; busy = false; }
         }, 260);
       }
-    }, { passive: true });
+    }, { passive: false });
   })();
 
   // 手机/平板下显示菜单按钮
@@ -5441,7 +5452,16 @@ async function startWrongBookPractice() {
   }
   
   // 显示模式初始化（护眼/夜间/关）
-  var themeMode = localStorage.getItem('themeMode') || 'off';
+  // localStorage 安全访问封装
+  function safeLSGet(key, fallback) {
+    try { var v = localStorage.getItem(key); return v !== null ? v : fallback; }
+    catch(e) { return fallback; }
+  }
+  function safeLSSet(key, value) {
+    try { localStorage.setItem(key, value); } catch(e) {}
+  }
+  
+  var themeMode = safeLSGet('themeMode', 'off');
   if (themeMode === 'eye-protect') document.body.classList.add('eye-protect');
   else if (themeMode === 'night') document.body.classList.add('night-mode');
   updateThemeUI();
@@ -5451,13 +5471,13 @@ async function startWrongBookPractice() {
     if (document.body.classList.contains('eye-protect')) {
       document.body.classList.remove('eye-protect');
       document.body.classList.add('night-mode');
-      localStorage.setItem('themeMode', 'night');
+      safeLSSet('themeMode', 'night');
     } else if (document.body.classList.contains('night-mode')) {
       document.body.classList.remove('night-mode');
-      localStorage.setItem('themeMode', 'off');
+      safeLSSet('themeMode', 'off');
     } else {
       document.body.classList.add('eye-protect');
-      localStorage.setItem('themeMode', 'eye-protect');
+      safeLSSet('themeMode', 'eye-protect');
     }
     updateThemeUI();
   };
@@ -5482,7 +5502,7 @@ async function startWrongBookPractice() {
   var fontIdx = 1; // 默认"中"
 
   // 初始化字号
-  var savedFont = localStorage.getItem('fontSize');
+  var savedFont = safeLSGet('fontSize', '');
   if (savedFont) {
     if (savedFont === 'sm') fontIdx = 0;
     else if (savedFont === 'md') fontIdx = 1;
@@ -5496,7 +5516,7 @@ async function startWrongBookPractice() {
     var cls = fontSizes[fontIdx];
     if (cls) document.body.classList.add(cls);
     var label = fontLabels[fontIdx];
-    localStorage.setItem('fontSize', ['sm','md','lg','xl'][fontIdx]);
+    safeLSSet('fontSize', ['sm','md','lg','xl'][fontIdx]);
     // 更新UI
     var fb = document.getElementById('font-global-btn');
     var fs = document.getElementById('font-status');
