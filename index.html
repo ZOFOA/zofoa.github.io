@@ -393,17 +393,42 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .card { padding: 12px; }
   
   /* 刷题容器 */
-  .practice-container { flex-direction: column; min-height: auto; }
-  .practice-sidebar { width: 100%; min-width: 100%; max-height: 120px; display: flex; flex-wrap: wrap; gap: 4px; align-content: flex-start; overflow-y: auto; }
-  .practice-sidebar .sidebar-header { flex-basis: 100%; }
+  .practice-container { flex-direction: column; min-height: auto; padding-bottom: 56px; }
+  .practice-sidebar { width: 100%; min-width: 100%; max-height: 120px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; padding: 4px; overflow-y: auto; }
+  .practice-sidebar .sidebar-header { grid-column: 1 / -1; }
   .practice-main { margin-top: 8px; }
-  .bottom-nav-bar { padding: 8px 10px; flex-wrap: wrap; gap: 6px; }
+  
+  /* 底部导航固定 */
+  .bottom-nav-bar { 
+    position: fixed; bottom: 0; left: 0; right: 0; 
+    padding: 8px 10px; z-index: 100; 
+    background: #fff; border-top: 1px solid #e8ecf1;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+  }
   .bottom-nav-bar .btn { min-width: 80px; font-size: 13px; }
   
+  /* 手机下侧边栏弹窗模式 */
+  .practice-sidebar.mobile-popup {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;
+    background: #fff; padding: 16px; border-radius: 0; box-shadow: none;
+    max-height: 100vh; overflow-y: auto;
+  }
+  
   /* 考试容器 */
-  .exam-container { flex-direction: column; min-height: auto; }
+  .exam-container { flex-direction: column; min-height: auto; padding-bottom: 56px; }
   .exam-sidebar { width: 100%; flex-shrink: 1; max-height: 100px; display: flex; flex-wrap: wrap; gap: 4px; overflow-y: auto; }
   .exam-main { margin-top: 8px; }
+  
+  /* 平板侧边栏按钮 */
+  #practice-sidebar-show {
+    position: fixed; top: 10px; right: 12px; z-index: 99;
+    background: #10b981; color: #fff; border: none;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 18px; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: inline-flex !important;
+  }
 
   /* 首页卡片网格 */
   .flex-row { flex-wrap: wrap; gap: 10px; }
@@ -416,6 +441,27 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 }
 
 @media (max-width: 480px) {
+  /* 隐藏头部导航和配置面板 */
+  .header-nav { display: none !important; }
+  .header-nav.mobile-show { display: flex !important; flex-wrap: wrap; }
+  #practice-ctrl { display: none !important; }
+  #practice-ctrl.mobile-show { display: block !important; }
+  #exam-config { display: none !important; }
+  #exam-config.mobile-show { display: block !important; }
+  /* 移动端菜单切换按钮 - 最右侧 */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    position: fixed; top: 10px; right: 12px; z-index: 101;
+    background: #1a6ff5; color: #fff; border: none;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 20px; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  /* 侧边栏按钮在菜单按钮左侧 */
+  #practice-sidebar-show { right: 58px !important; }
+  /* 手机题号网格 4列 */
+  .practice-sidebar { grid-template-columns: repeat(4, 1fr) !important; max-height: 100px !important; }
+  
   .header h1 { font-size: 16px; }
   .card-title { font-size: 15px; }
   .bottom-nav-bar .btn { min-width: 64px; padding: 8px 10px; font-size: 12px; }
@@ -455,6 +501,9 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     <button data-tab="5">❓ 使用说明</button>
   </nav>
 </header>
+
+<!-- 手机菜单按钮 -->
+<button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display:none">☰</button>
 
 <!-- ========== MAIN ========== -->
 <div class="main">
@@ -582,7 +631,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
         <button class="btn btn-primary" id="p-next" onclick="practiceNext()">下一题 ➡</button>
       </div>
     </div>
-    <button class="sidebar-show-btn" id="practice-sidebar-show" onclick="togglePracticeSidebar()" style="display:none" title="显示题号窗格">☰</button>
+    <button class="sidebar-show-btn" id="practice-sidebar-show" onclick="togglePracticeSidebar()" title="显示题号窗格">☰</button>
   </div>
 </div>
 
@@ -2684,7 +2733,12 @@ async function startPracticeInternal() {
   practiceResultsMap = {};
   practiceAutoSubmitTimer = null;
   practiceAutoAdvanceTimer = null;
+  practiceNavigating = false;
   practiceIndex = 0;
+  
+  // 手机模式下初始化侧边栏按钮
+  updateSidebarToggleButton();
+  
   document.getElementById('practice-container').style.display = 'flex';
   togglePracticeCtrl(true);
   updateCtrlSummary();
@@ -2751,10 +2805,12 @@ async function renderPracticeSidebar() {
 }
 
 function practiceGoTo(idx) {
+  if (practiceNavigating) return;
   if (idx < 0 || idx >= practiceQuestions.length) return;
   // 取消待执行的定时器
   if (practiceAutoSubmitTimer) { clearTimeout(practiceAutoSubmitTimer); practiceAutoSubmitTimer = null; }
   if (practiceAutoAdvanceTimer) { clearTimeout(practiceAutoAdvanceTimer); practiceAutoAdvanceTimer = null; }
+  practiceNavigating = true;
   // 保存当前题的选中状态
   if (practiceQuestions[practiceIndex] && practiceSelectedLabels.length > 0) {
     practiceSelectionsMap[practiceQuestions[practiceIndex].id] = [...practiceSelectedLabels];
@@ -2763,13 +2819,59 @@ function practiceGoTo(idx) {
   // 恢复目标题的选中状态
   const q = practiceQuestions[practiceIndex];
   practiceSelectedLabels = q ? (practiceSelectionsMap[q.id] || []) : [];
+  // 手机弹窗模式选中后关闭
+  const sidebar = document.getElementById('practice-sidebar');
+  if (sidebar && sidebar.classList.contains('mobile-popup')) {
+    sidebar.classList.remove('mobile-popup');
+    updateSidebarToggleButton();
+  }
   renderPracticeQuestion();
+  practiceNavigating = false;
+}
+
+function updateSidebarToggleButton() {
+  const showBtn = document.getElementById('practice-sidebar-show');
+  if (!showBtn) return;
+  showBtn.innerHTML = '☰';
+}
+
+function toggleMobileMenu() {
+  const nav = document.querySelector('.header-nav');
+  const ctrl = document.getElementById('practice-ctrl');
+  const examCfg = document.getElementById('exam-config');
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const isOpen = nav.classList.contains('mobile-show');
+  if (isOpen) {
+    nav.classList.remove('mobile-show');
+    if (ctrl) ctrl.classList.remove('mobile-show');
+    if (examCfg) examCfg.classList.remove('mobile-show');
+    menuBtn.innerHTML = '☰';
+  } else {
+    nav.classList.add('mobile-show');
+    if (ctrl) ctrl.classList.add('mobile-show');
+    if (examCfg) examCfg.classList.add('mobile-show');
+    menuBtn.innerHTML = '✕';
+  }
 }
 
 function togglePracticeSidebar() {
   const sidebar = document.getElementById('practice-sidebar');
   const showBtn = document.getElementById('practice-sidebar-show');
   if (!sidebar || !showBtn) return;
+  
+  // 手机/平板：弹窗模式
+  if (window.innerWidth <= 900) {
+    if (sidebar.classList.contains('mobile-popup')) {
+      sidebar.classList.remove('mobile-popup');
+      showBtn.innerHTML = '☰';
+    } else {
+      sidebar.classList.add('mobile-popup');
+      showBtn.innerHTML = '✕';
+    }
+    return;
+  }
+  
+  // 桌面端
   const isCollapsed = sidebar.classList.toggle('collapsed');
   showBtn.style.display = isCollapsed ? 'flex' : 'none';
 }
@@ -2949,6 +3051,7 @@ let practiceSelectionsMap = {}; // 记录每题的选中状态，按题目ID存�
 let practiceResultsMap = {}; // 记录每题的对错结果和解析，按题目ID存储
 let practiceAutoSubmitTimer = null; // 自动提交定时器
 let practiceAutoAdvanceTimer = null; // 答对自动跳转定时器
+let practiceNavigating = false; // 防止快速导航导致并发渲染
 
 function practiceSelectOption(el, label) {
   // 已提交答案后禁止修改选项
@@ -2976,14 +3079,11 @@ function practiceSelectOption(el, label) {
   }
 }
 
-let practiceSubmitting = false; // 防止重复提交
-
 async function practiceSubmit() {
   if (practiceSelectedLabels.length === 0) { showToast('请先选择答案'); return; }
-  if (practiceSubmitting) return;
-  practiceSubmitting = true;
 
   const submitBtn = document.getElementById('practice-submit-btn');
+  if (!submitBtn || submitBtn.disabled) return;
   submitBtn.disabled = true;
 
   try {
@@ -3061,23 +3161,21 @@ async function practiceSubmit() {
       if (practiceIndex < practiceQuestions.length - 1) {
         practiceNext();
       }
-      practiceSubmitting = false;
     }, 500);
-  } else {
-    practiceSubmitting = false;
   }
   } catch (e) {
     console.error('[practiceSubmit] error:', e);
     showToast('提交失败，请重试');
     submitBtn.disabled = false;
-    practiceSubmitting = false;
   }
 }
 
 async function practicePrev() {
+  if (practiceNavigating) return;
   // 取消待执行的定时器
   if (practiceAutoSubmitTimer) { clearTimeout(practiceAutoSubmitTimer); practiceAutoSubmitTimer = null; }
   if (practiceAutoAdvanceTimer) { clearTimeout(practiceAutoAdvanceTimer); practiceAutoAdvanceTimer = null; }
+  practiceNavigating = true;
   // 保存当前题的选中状态
   if (practiceQuestions[practiceIndex] && practiceSelectedLabels.length > 0) {
     practiceSelectionsMap[practiceQuestions[practiceIndex].id] = [...practiceSelectedLabels];
@@ -3089,12 +3187,15 @@ async function practicePrev() {
   practiceSelectedLabels = q ? (practiceSelectionsMap[q.id] || []) : [];
   renderPracticeQuestion();
   // 回看已做题不保存进度位置
+  practiceNavigating = false;
 }
 
 async function practiceNext() {
+  if (practiceNavigating) return;
   // 取消待执行的定时器
   if (practiceAutoSubmitTimer) { clearTimeout(practiceAutoSubmitTimer); practiceAutoSubmitTimer = null; }
   if (practiceAutoAdvanceTimer) { clearTimeout(practiceAutoAdvanceTimer); practiceAutoAdvanceTimer = null; }
+  practiceNavigating = true;
   // 保存当前题的选中状态
   if (practiceQuestions[practiceIndex] && practiceSelectedLabels.length > 0) {
     practiceSelectionsMap[practiceQuestions[practiceIndex].id] = [...practiceSelectedLabels];
@@ -3113,17 +3214,19 @@ async function practiceNext() {
     await renderCategoryPanel();
     renderDashboard();
     await clearPracticeState();
+    practiceNavigating = false;
     return;
   }  // 错题测试完成结束
   
   // 已是最后一题，停留在原位
-  if (practiceIndex >= practiceQuestions.length - 1) return;
+  if (practiceIndex >= practiceQuestions.length - 1) { practiceNavigating = false; return; }
   
   practiceIndex = nextIndex;
   // 恢复目标题的选中状态
   const q = practiceQuestions[practiceIndex];
   practiceSelectedLabels = q ? (practiceSelectionsMap[q.id] || []) : [];
   renderPracticeQuestion();
+  practiceNavigating = false;
 }
 
 // 重新开始：重置当前刷题会话的所有统计并回到第一题
@@ -4745,8 +4848,6 @@ async function startWrongBookPractice() {
   document.addEventListener('keydown', function(e) {
     // 忽略输入框内的按键
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
-    // 防止提交中触发导航
-    if (practiceSubmitting) return;
     if (e.key === 'F2') {
       e.preventDefault();
       if (typeof practiceNext === 'function' && document.getElementById('tab-1').classList.contains('active') && document.getElementById('practice-container').style.display !== 'none') {
@@ -4763,6 +4864,39 @@ async function startWrongBookPractice() {
       }
     }
   });
+
+  // 手机/平板左右滑动切换题目
+  (function setupSwipe() {
+    let touchStartX = 0, touchStartY = 0, swipePending = false;
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+    document.addEventListener('touchend', function(e) {
+      if (swipePending) return;
+      if (!e.changedTouches.length) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
+      const isPractice = document.getElementById('tab-1').classList.contains('active') && document.getElementById('practice-container').style.display !== 'none';
+      const isExam = document.getElementById('tab-2').classList.contains('active') && document.getElementById('exam-running').style.display !== 'none';
+      if (!isPractice && !isExam) return;
+      
+      swipePending = true;
+      if (dx < 0) {
+        if (isPractice && typeof practiceNext === 'function') practiceNext();
+        else if (isExam && typeof examNext === 'function') examNext();
+      } else {
+        if (isPractice && typeof practicePrev === 'function') practicePrev();
+        else if (isExam && typeof examPrev === 'function') examPrev();
+      }
+      setTimeout(function() { swipePending = false; }, 300);
+    });
+  })();
 })();
 </script>
 </html>
