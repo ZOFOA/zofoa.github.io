@@ -5267,7 +5267,7 @@ async function startWrongBookPractice() {
 
   // 手机/平板左右滑动切换题目（并排卡片滑动）
   (function setupSwipe() {
-    var startX = 0, startY = 0, swiping = false;
+    var startX = 0, startY = 0, swiping = false, locked = false;
     var track = null, areaEl = null, cardRef = null;
     var baseX = 0, timer = null;
     var THRESHOLD = 60;
@@ -5295,8 +5295,11 @@ async function startWrongBookPractice() {
     }
     function destroy() {
       if (timer) { clearTimeout(timer); timer = null; }
-      if (track && track.parentNode) track.parentNode.removeChild(track);
-      track = null; areaEl = null; cardRef = null; swiping = false;
+      if (track) {
+        if (track.parentNode) track.parentNode.removeChild(track);
+        track = null;
+      }
+      areaEl = null; cardRef = null; swiping = false; locked = false;
     }
 
     // 创建轨道（仅在确认滑动后调用）
@@ -5322,9 +5325,15 @@ async function startWrongBookPractice() {
     }
 
     document.addEventListener('touchstart', function(e) {
-      if (e.touches.length !== 1) return;
-      // 清理上一次滑动残留状态
-      destroy();
+      if (e.touches.length !== 1 || locked) return;
+      // 清理残留轨道（仅当轨道仍在DOM中时才删除）
+      if (track) {
+        if (track.parentNode) track.parentNode.removeChild(track);
+        track = null;
+      }
+      if (timer) { clearTimeout(timer); timer = null; }
+      areaEl = null; cardRef = null; swiping = false;
+      
       var m = activeMode();
       if (!m || m.list.length <= 1) return;
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
@@ -5370,6 +5379,7 @@ async function startWrongBookPractice() {
         // 下一题：滑出→锁高度→导航→innerHTML覆盖
         track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
         track.style.transform = 'translateX(' + (baseX - w) + 'px)';
+        locked = true;
         var fn = m.goNext;
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
@@ -5379,6 +5389,7 @@ async function startWrongBookPractice() {
         // 上一题
         track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
         track.style.transform = 'translateX(' + (baseX + w) + 'px)';
+        locked = true;
         var fn = m.goPrev;
         timer = setTimeout(function() {
           if (typeof fn === 'function') fn();
