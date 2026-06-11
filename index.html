@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>刷题 · 模拟考试系统</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <style>
@@ -15,7 +18,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 /* ===== Header ===== */
 .header { background: linear-gradient(135deg, #1a6ff5 0%, #1558c2 100%); color: #fff; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; box-shadow: 0 2px 8px rgba(26,111,245,0.25); position: sticky; top: 0; z-index: 100; }
 .header h1 { font-size: 18px; font-weight: 600; letter-spacing: 0.5px; }
-.header-nav { display: flex; gap: 4px; }
+.header-nav { display: none !important; } /* 默认全部隐藏，仅在桌面端显示 */
 .header-nav button { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); padding: 8px 16px; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
 .header-nav button:hover { background: rgba(255,255,255,0.22); color: #fff; }
 .header-nav button.active { background: rgba(255,255,255,0.28); color: #fff; font-weight: 600; }
@@ -25,7 +28,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 
 /* ===== Tab Content ===== */
 .tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+.tab-content.active { display: block !important; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ===== Cards ===== */
@@ -49,6 +52,8 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 .btn-success:hover { background: #059669; }
 .btn-danger { background: #e74c3c; color: #fff; }
 .btn-danger:hover { background: #c0392b; }
+.btn-warning { background: #f59e0b; color: #fff; }
+.btn-warning:hover { background: #d97706; }
 .btn-outline { background: #fff; color: #1a6ff5; border: 1px solid #1a6ff5; }
 .btn-outline:hover { background: #f0f6ff; }
 .btn-ghost { background: transparent; color: #666; }
@@ -97,22 +102,23 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-card .exam-actions { display: flex; gap: 6px; }
 
 /* ===== Question Card ===== */
-.question-card { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; }
-.question-meta { display: flex; gap: 12px; margin-bottom: 12px; font-size: 12px; }
-.question-stem { font-size: 16px; font-weight: 600; line-height: 1.7; color: #1a1a1a; margin-bottom: 20px; }
+.question-card { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; animation: cardSlideIn 0.15s ease; }
+@keyframes cardSlideIn { from { transform: translateX(20px); } to { transform: translateX(0); } }
+.question-meta { display: flex; gap: 12px; margin-bottom: 12px; font-size: 13px; }
+.question-stem { font-size: 19px; font-weight: 600; line-height: 1.8; color: #1a1a1a; margin-bottom: 20px; }
 .option-list { display: flex; flex-direction: column; gap: 10px; }
-.option-item { padding: 12px 16px; border: 2px solid #e8ecf1; border-radius: 8px; cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 10px; font-size: 15px; }
+.option-item { padding: 14px 18px; border: 2px solid #e8ecf1; border-radius: 8px; cursor: pointer; transition: all 0.15s; display: flex; align-items: flex-start; gap: 12px; font-size: 17px; line-height: 1.6; }
 .option-item:hover { border-color: #1a6ff5; background: #f8faff; }
 .option-item.selected { border-color: #1a6ff5; background: #eef4ff; }
 .option-item.correct { border-color: #10b981; background: #ecfdf5; }
 .option-item.wrong { border-color: #e74c3c; background: #fef2f2; }
-.option-label { width: 32px; height: 32px; border-radius: 50%; background: #f0f2f5; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.option-label { width: 36px; height: 36px; border-radius: 50%; background: #f0f2f5; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
 .option-item.selected .option-label { background: #1a6ff5; color: #fff; }
 .option-item.correct .option-label { background: #10b981; color: #fff; }
 .option-item.wrong .option-label { background: #e74c3c; color: #fff; }
 
 /* ===== Analysis Box ===== */
-.analysis-box { margin-top: 16px; padding: 14px 18px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.7; color: #92400e; display: none; }
+.analysis-box { margin-top: 16px; padding: 14px 18px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.7; color: #92400e; display: none; }
 .analysis-box.show { display: block; }
 
 /* ===== Progress Bar ===== */
@@ -145,10 +151,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .sidebar-num.current { background: #1a6ff5; color: #fff; }
 .sidebar-num.answered { background: #d1fae5; color: #065f46; }
 .sidebar-num.current.answered { background: #10b981; color: #fff; }
-.exam-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; }
-.exam-main-scroll { flex: 1; overflow-y: auto; padding-bottom: 8px; }
-.sidebar-show-btn { position: fixed; left: 16px; top: 50%; transform: translateY(-50%); z-index: 50; width: 36px; height: 36px; border-radius: 6px; background: #1a6ff5; color: #fff; border: none; font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(26,111,245,0.3); display: none; }
-.sidebar-show-btn:hover { background: #1558c2; }
+.exam-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
+.exam-main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
 
 /* ===== Upload Zone ===== */
 .upload-zone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 40px; text-align: center; transition: all 0.2s; cursor: pointer; }
@@ -239,8 +243,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .sidebar-num-current { border-color: #1a6ff5 !important; box-shadow: 0 0 0 2px rgba(26,111,245,0.2); transform: scale(1.1); }
 .sidebar-num:hover { filter: brightness(0.95); }
 
-.practice-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; }
-.practice-main-scroll { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+.practice-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
+.practice-main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
 .practice-main #practice-area { margin-top: 0; }
 
 /* ===== 底部固定导航栏 ===== */
@@ -334,19 +338,42 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 #practice-ctrl.collapsed { padding: 8px 14px; }
 #practice-ctrl.collapsed .ctrl-header { margin-bottom: 0; }
 
-.sidebar-show-btn {
-  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-  background: #1a6ff5; color: #fff; border: none; border-radius: 0 8px 8px 0;
-  width: 28px; height: 64px; cursor: pointer; font-size: 16px;
-  box-shadow: 2px 0 8px rgba(0,0,0,0.15); z-index: 10;
+/* 手机侧滑菜单 — 全局样式，在所有屏幕尺寸下生效 */
+.mobile-menu-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); z-index: 1100; display: none;
+}
+.mobile-menu-overlay.show { display: block; }
+.mobile-menu-panel {
+  position: fixed; top: 0; right: 0; width: 260px; height: 100%;
+  background: #fff; z-index: 1101; 
   display: none;
+  flex-direction: column;
+  box-shadow: -4px 0 16px rgba(0,0,0,0.15);
 }
-.sidebar-show-btn:hover { background: #1558d6; }
-
-@media (max-width: 768px) {
-  .practice-sidebar { display: none !important; }
-  .sidebar-show-btn { display: flex !important; }
+.mobile-menu-panel.show { 
+  display: flex;
 }
+.mobile-menu-panel .menu-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 20px 16px; font-weight: 700; font-size: 18px; color: #1a1a1a;
+}
+.mobile-menu-panel .menu-header button {
+  background: none; border: none; font-size: 20px; cursor: pointer;
+  color: #888; padding: 4px 8px; border-radius: 6px;
+}
+.mobile-menu-panel .menu-header button:hover { background: #f0f0f0; }
+.mobile-menu-panel .menu-items { flex: 1; overflow-y: auto; padding: 8px 0; }
+.mobile-menu-panel .menu-items button {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px; border: none; background: none;
+  font-size: 16px; cursor: pointer; color: #333; text-align: left;
+  border-bottom: 1px solid #f5f5f5; transition: background 0.15s;
+}
+.mobile-menu-panel .menu-items button:last-child { border-bottom: none; }
+.mobile-menu-panel .menu-items button:hover { background: #f0f5ff; color: #1a6ff5; }
+.mobile-menu-panel .menu-items button:active { background: #dbeafe; }
+.mobile-menu-panel .menu-items button .menu-icon { font-size: 20px; width: 28px; text-align: center; }
 
 /* ===== Exam Record Sidebar (历史试卷左侧窗格) ===== */
 .exam-record-container { display: flex; gap: 16px; max-height: 70vh; }
@@ -377,16 +404,35 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-record-num.current.wrong { background: #e74c3c; color: #fff; }
 .exam-record-main { flex: 1; min-width: 0; overflow-y: auto; max-height: 70vh; padding-right: 8px; }
 @media (max-width: 768px) {
-  .exam-record-container { flex-direction: column; }
-  .exam-record-sidebar { width: 100%; min-width: 100%; max-height: 200px; }
+  .header-nav { display: none !important; }
+  .practice-sidebar { display: none !important; }
+  .exam-record-container { flex-direction: column; max-height: none; }
+  .exam-record-sidebar { 
+    width: 100%; min-width: 100%; max-height: 38vh; 
+    padding: 14px;
+  }
+  .exam-record-sidebar-header { font-size: 15px; margin-bottom: 12px; }
+  .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .exam-record-num { height: 38px; font-size: 14px; }
+  .exam-record-main { max-height: 55vh; }
 }
 
 /* ===== 响应式：手机/平板 ===== */
 @media (max-width: 900px) {
-  /* 头部导航滚动 */
+  /* 头部导航在手机/平板上由侧滑菜单替代 */
   .header { flex-wrap: wrap; padding: 8px 12px; }
-  .header-nav { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
-  .header-nav button { padding: 6px 12px; font-size: 13px; }
+  .header-nav { display: none !important; }
+  /* 护眼按钮在平板/手机端由侧滑菜单提供，避免与固定菜单按钮重叠 */
+  #eye-global-btn { display: none !important; }
+  /* 平板端也显示菜单按钮 */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    position: fixed; top: 10px; right: 12px; z-index: 101;
+    background: #1a6ff5; color: #fff; border: none;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 20px; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
   
   /* 内容区域 */
   .container { padding: 10px; }
@@ -394,8 +440,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   
   /* 刷题容器 */
   .practice-container { flex-direction: column; min-height: auto; padding-bottom: 56px; }
-  .practice-sidebar { width: 100%; min-width: 100%; max-height: 120px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; padding: 4px; overflow-y: auto; }
-  .practice-sidebar .sidebar-header { grid-column: 1 / -1; }
+  .practice-sidebar { display: none !important; }
   .practice-main { margin-top: 8px; }
   
   /* 底部导航固定 */
@@ -404,32 +449,50 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     padding: 8px 10px; z-index: 100; 
     background: #fff; border-top: 1px solid #e8ecf1;
     box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    display: flex; justify-content: center; align-items: center; gap: 8px;
+    display: flex; justify-content: space-between; align-items: center; gap: 4px;
   }
-  .bottom-nav-bar .btn { min-width: 80px; font-size: 13px; }
+  .bottom-nav-bar .btn { min-width: 80px; font-size: 14px; padding: 10px 12px; }
   
-  /* 手机下侧边栏弹窗模式 */
+  /* 手机下侧边栏弹窗模式 — 全屏答题卡 */
   .practice-sidebar.mobile-popup {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;
-    background: #fff; padding: 16px; border-radius: 0; box-shadow: none;
-    max-height: 100vh; overflow-y: auto;
+    position: fixed; top: 0; left: 0; bottom: 0; width: 100%; z-index: 200;
+    background: #fff; padding: 20px; border-radius: 0; box-shadow: none;
+    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column;
+    max-height: none !important;
+  }
+  .practice-sidebar.mobile-popup .sidebar-header {
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+  .practice-sidebar.mobile-popup .sidebar-nums {
+    flex: 1;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    align-content: start;
+  }
+  .practice-sidebar.mobile-popup .sidebar-num {
+    height: 40px;
+    font-size: 14px;
+    border-radius: 8px;
   }
   
   /* 考试容器 */
   .exam-container { flex-direction: column; min-height: auto; padding-bottom: 56px; }
-  .exam-sidebar { width: 100%; flex-shrink: 1; max-height: 100px; display: flex; flex-wrap: wrap; gap: 4px; overflow-y: auto; }
+  .exam-sidebar { display: none !important; }
+  .exam-sidebar.show-popup {
+    display: flex !important;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;
+    background: #fff; padding: 20px; border-radius: 0; box-shadow: none;
+    overflow-y: auto; flex-direction: column; flex-wrap: nowrap;
+    max-height: 100vh;
+  }
+  .exam-sidebar.show-popup .sidebar-header { margin-bottom: 16px; }
+  .exam-sidebar.show-popup .sidebar-nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; align-content: start; }
+  .exam-sidebar.show-popup .sidebar-num { height: 40px; font-size: 14px; border-radius: 8px; }
   .exam-main { margin-top: 8px; }
   
-  /* 平板侧边栏按钮 */
-  #practice-sidebar-show {
-    position: fixed; top: 10px; right: 12px; z-index: 99;
-    background: #10b981; color: #fff; border: none;
-    border-radius: 50%; width: 40px; height: 40px;
-    font-size: 18px; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    display: inline-flex !important;
-  }
-
   /* 首页卡片网格 */
   .flex-row { flex-wrap: wrap; gap: 10px; }
   
@@ -441,13 +504,65 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 }
 
 @media (max-width: 480px) {
-  /* 隐藏头部导航和配置面板 */
+  /* 隐藏头部导航（手机端由侧滑菜单替代） */
   .header-nav { display: none !important; }
-  .header-nav.mobile-show { display: flex !important; flex-wrap: wrap; }
-  #practice-ctrl { display: none !important; }
-  #practice-ctrl.mobile-show { display: block !important; }
-  #exam-config { display: none !important; }
-  #exam-config.mobile-show { display: block !important; }
+  /* 手机端刷题配置面板：压缩为单行 */
+  #practice-ctrl {
+    padding: 3px 6px !important;
+    margin: 0 0 4px 0 !important;
+    line-height: 1.4;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none;
+    overflow: hidden;
+  }
+  #practice-ctrl .card-title { display: none; }
+  #practice-ctrl .ctrl-body { display: none; }
+  #practice-ctrl.collapsed .ctrl-body { display: none; }
+  #practice-ctrl .ctrl-header {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+  #practice-ctrl .btn-sm { width: auto !important; padding: 2px 4px !important; font-size: 10px !important; }
+  #practice-ctrl .ctrl-header > div:first-child { display: none !important; }
+  #practice-ctrl .compact-btn { font-size: 11px; padding: 2px 4px; margin: 0; flex-shrink: 0; }
+  #practice-ctrl #ctrl-collapse-btn { display: none; }
+  #practice-ctrl .ctrl-header > div:last-child {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    gap: 3px;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+  }
+  #practice-ctrl #ctrl-summary {
+    font-size: 11px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    display: inline-block;
+    flex-shrink: 1;
+  }
+  #practice-ctrl .btn-outline.btn-sm { font-size: 10px; padding: 2px 4px; flex-shrink: 0; min-width: auto; }
+  #practice-ctrl .btn-label { display: none; }
+  /* 展开时恢复 */
+  #practice-ctrl.expanded {
+    padding: 8px 10px !important;
+    background: #fff !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+  }
+  #practice-ctrl.expanded .card-title { display: flex; }
+  #practice-ctrl.expanded .ctrl-body { display: block; }
+  #practice-ctrl.expanded .ctrl-header { margin-bottom: 8px; display: flex !important; }
+  #practice-ctrl.expanded #ctrl-collapse-btn { display: inline-flex; }
   /* 移动端菜单切换按钮 - 最右侧 */
   .mobile-menu-btn {
     display: inline-flex !important;
@@ -457,20 +572,19 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     font-size: 20px; align-items: center; justify-content: center;
     cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
-  /* 侧边栏按钮在菜单按钮左侧 */
-  #practice-sidebar-show { right: 58px !important; }
   /* 手机题号网格 4列 */
   .practice-sidebar { grid-template-columns: repeat(4, 1fr) !important; max-height: 100px !important; }
+  .practice-sidebar.mobile-popup { max-height: none !important; grid-template-columns: unset !important; }
   
   .header h1 { font-size: 16px; }
   .card-title { font-size: 15px; }
-  .bottom-nav-bar .btn { min-width: 64px; padding: 8px 10px; font-size: 12px; }
+  .bottom-nav-bar .btn { min-width: 64px; padding: 10px 10px; font-size: 14px; }
   .btn { padding: 8px 14px; font-size: 13px; }
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   
   /* 选项按钮增大触控区域 */
-  .option-item { padding: 12px 14px; font-size: 14px; }
-  .option-label { min-width: 28px; height: 28px; line-height: 28px; font-size: 13px; }
+  .option-item { padding: 12px 14px; font-size: 16px; }
+  .option-label { min-width: 32px; height: 32px; line-height: 32px; font-size: 14px; }
   
   /* 考试按钮 */
   .exam-timer { font-size: 14px; }
@@ -478,6 +592,31 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 间隔缩小 */
   .mt-16 { margin-top: 10px; }
   .mt-12 { margin-top: 8px; }
+  /* 首页手机优化 */
+  .stat-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .stat-card { padding: 12px 8px !important; }
+  .stat-card .num { font-size: 22px !important; }
+  .stat-card .label { font-size: 11px !important; }
+  .btn-lg { padding: 8px 12px !important; font-size: 13px !important; }
+  /* 手机首页按钮堆叠 */
+  .flex-row:has(.btn-lg) { flex-direction: column; gap: 6px; }
+  .flex-row:has(.btn-lg) .btn { width: 100%; justify-content: center; }
+  /* 数据管理按钮区优化 */
+  .flex-row:has(.btn-sm) { 
+    flex-direction: column;
+    gap: 4px;
+  }
+  .flex-row:has(.btn-sm) .btn-sm { width: 100%; justify-content: center; font-size: 12px; padding: 6px 8px; }
+  /* 最近考试记录紧凑显示 */
+  .exam-card { padding: 10px 12px !important; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .exam-card .exam-title { font-size: 13px !important; }
+  .exam-card .exam-meta { font-size: 11px !important; gap: 6px !important; }
+  .exam-card .exam-score .big { font-size: 20px !important; }
+  /* 历史考题：题号导航窗格优化 */
+  .exam-record-sidebar { padding: 10px; }
+  .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .exam-record-num { height: 42px; font-size: 15px; border-radius: 8px; }
+  .exam-record-main { max-height: 50vh; }
 }
 
 /* 错题库模态框样式 */
@@ -485,6 +624,51 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 #wrongbook-modal .badge-single { background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
 #wrongbook-modal .badge-multiple { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
 #wrongbook-modal .badge-judge { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+/* 桌面端（>900px）显示导航栏 */
+@media (min-width: 901px) {
+  .header-nav { display: flex !important; gap: 4px; }
+  .header-nav button { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); padding: 8px 16px; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
+  .header-nav button:hover { background: rgba(255,255,255,0.22); color: #fff; }
+  .header-nav button.active { background: rgba(255,255,255,0.28); color: #fff; font-weight: 600; }
+}
+
+/* ===== 护眼模式（浅绿色调） ===== */
+body.eye-protect { background: #c7edcc; color: #2a3a2a; }
+body.eye-protect .card { background: #d4f0d8; }
+body.eye-protect .card-title { color: #2a3a2a; }
+body.eye-protect .question-card { background: #d4f0d8; }
+body.eye-protect .question-stem { color: #2a3a2a; }
+body.eye-protect .option-item { border-color: #9ec5a4; color: #2a3a2a; }
+body.eye-protect .option-item:hover { background: #bee6c4; }
+body.eye-protect .question-meta { color: #4a6a4a; }
+body.eye-protect .analysis-box { background: #e8f5e0; color: #4a6a2a; border-left-color: #8bc49a; }
+body.eye-protect .bottom-nav-bar { background: #d4f0d8; border-top-color: #9ec5a4; }
+body.eye-protect .exam-card { background: #d4f0d8; }
+body.eye-protect .data-table th { background: #b8dcc0; color: #2a3a2a; border-color: #9ec5a4; }
+body.eye-protect .data-table td { border-color: #b8dcc0; }
+body.eye-protect .data-table tr:hover td { background: #bee6c4; }
+body.eye-protect .form-input, body.eye-protect .form-select { background: #fff; color: #2a3a2a; border-color: #9ec5a4; }
+body.eye-protect .stat-card { background: #d4f0d8; }
+body.eye-protect .modal { background: #d4f0d8; }
+body.eye-protect .sidebar-num { background: #b8dcc0; color: #4a6a4a; }
+body.eye-protect .text-muted { color: #5a7a5a !important; }
+body.eye-protect .category-card { background: #d4f0d8; }
+body.eye-protect .btn-outline { background: #d4f0d8; color: #3a7a3a; border-color: #8bc49a; }
+body.eye-protect .mobile-menu-panel { background: #d4f0d8; }
+body.eye-protect .mobile-menu-panel .menu-items button { color: #2a3a2a; border-color: #b8dcc0; }
+body.eye-protect .mobile-menu-panel .menu-items button:hover { background: #bee6c4; }
+body.eye-protect .mobile-menu-panel .menu-header { color: #2a3a2a; }
+body.eye-protect .exam-sidebar { background: #d4f0d8; }
+body.eye-protect .practice-sidebar { background: #d4f0d8; }
+/* 护眼模式全局切换按钮 */
+.eye-toggle-btn {
+  background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85);
+  border: none; border-radius: 6px; padding: 8px 16px;
+  font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+  flex-shrink: 0; transition: all 0.2s;
+}
+.eye-toggle-btn:hover { background: rgba(255,255,255,0.22); color: #fff; }
+body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
@@ -492,18 +676,18 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 <!-- ========== HEADER ========== -->
 <header class="header">
   <h1>📚 刷题 · 模拟考试系统</h1>
-  <nav class="header-nav">
-    <button class="active" data-tab="0">🏠 首页</button>
-    <button data-tab="1">📝 刷题</button>
-    <button data-tab="2">🧪 模拟考试</button>
-    <button data-tab="3">📊 统计</button>
-    <button data-tab="4">⚙️ 题库管理</button>
-    <button data-tab="5">❓ 使用说明</button>
-  </nav>
+  <div style="display:flex;align-items:center;gap:6px">
+    <nav class="header-nav">
+      <button class="active" data-tab="0">🏠 首页</button>
+      <button data-tab="1">📝 刷题</button>
+      <button data-tab="2">🧪 模拟考试</button>
+      <button data-tab="3">📊 统计</button>
+      <button data-tab="4">⚙️ 题库管理</button>
+      <button data-tab="5">❓ 使用说明</button>
+    </nav>
+    <button class="eye-toggle-btn" id="eye-global-btn" onclick="toggleEyeProtect()" title="护眼模式">🌙</button>
+  </div>
 </header>
-
-<!-- 手机菜单按钮 -->
-<button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display:none">☰</button>
 
 <!-- ========== MAIN ========== -->
 <div class="main">
@@ -571,8 +755,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
       </div>
       <div class="flex-row" style="gap:8px;align-items:center">
         <span id="ctrl-summary" style="font-size:12px;color:#888"></span>
-        <button class="btn btn-outline btn-sm" onclick="showCategoryPanel()">📂 返回分类</button>
-        <button class="btn btn-outline btn-sm" onclick="resetCurrentProgress()" title="重置当前刷题进度">🔄 重新开始</button>
+        <button class="btn btn-outline btn-sm" onclick="showCategoryPanel()">📂 <span class="btn-label">返回分类</span></button>
+        <button class="btn btn-outline btn-sm" onclick="resetCurrentProgress()" title="重置当前刷题进度">🔄 <span class="btn-label">重新开始</span></button>
       </div>
     </div>
     <div class="ctrl-body">
@@ -626,12 +810,12 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
       </div>
       <!-- 底部固定导航栏 -->
       <div class="bottom-nav-bar" id="practice-nav">
+        <button class="btn btn-outline" id="p-card-btn" onclick="togglePracticeSidebar()" title="题目导航">📋 答题卡</button>
         <button class="btn btn-outline" id="p-prev" onclick="practicePrev()">⬅ 上一题</button>
         <span id="p-position" style="font-size:13px;color:#888"></span>
         <button class="btn btn-primary" id="p-next" onclick="practiceNext()">下一题 ➡</button>
       </div>
     </div>
-    <button class="sidebar-show-btn" id="practice-sidebar-show" onclick="togglePracticeSidebar()" title="显示题号窗格">☰</button>
   </div>
 </div>
 
@@ -715,13 +899,12 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
         </div>
         <!-- 底部固定导航栏 -->
         <div class="bottom-nav-bar" id="exam-bottom-nav">
+          <button class="btn btn-outline" id="exam-card-btn" onclick="toggleExamSidebar()" title="题目导航">📋 答题卡</button>
           <button class="btn btn-outline" id="exam-prev-btn" onclick="examPrev()">⬅ 上一题</button>
           <span id="exam-position" style="font-size:13px;color:#888"></span>
           <button class="btn btn-primary" id="exam-next-btn" onclick="examNext()">下一题 ➡</button>
         </div>
       </div>
-      <!-- 显示侧边栏按钮 -->
-      <button class="sidebar-show-btn" id="exam-sidebar-show" onclick="toggleExamSidebar()" style="display:none" title="显示题号窗格">☰</button>
     </div>
   </div>
 
@@ -943,6 +1126,31 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 
 <!-- Modal Container -->
 <div id="modal-container"></div>
+
+<!-- 手机菜单按钮与侧滑菜单（在script之前，确保DOM已加载） -->
+<button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display:none">☰</button>
+<div class="mobile-menu-overlay" id="mobile-menu-overlay" onclick="hideMobileMenu()"></div>
+<div class="mobile-menu-panel" id="mobile-menu-panel">
+  <div class="menu-header">
+    <span>📋 导航菜单</span>
+    <button onclick="hideMobileMenu()">✕</button>
+  </div>
+  <div class="menu-items">
+    <button onclick="switchTab(0)"><span class="menu-icon">🏠</span> 首页</button>
+    <button onclick="switchTab(1)"><span class="menu-icon">📝</span> 刷题</button>
+    <button onclick="switchTab(2)"><span class="menu-icon">🧪</span> 模拟考试</button>
+    <button onclick="switchTab(3)"><span class="menu-icon">📊</span> 统计</button>
+    <button onclick="switchTab(4)"><span class="menu-icon">⚙️</span> 题库管理</button>
+    <button onclick="switchTab(5)"><span class="menu-icon">❓</span> 使用说明</button>
+  </div>
+  <div style="padding:8px 20px;border-top:1px solid #e8ecf1;margin-top:8px">
+    <button onclick="toggleEyeProtect()" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 0;border:none;background:none;font-size:16px;cursor:pointer;color:#333;text-align:left;">
+      <span class="menu-icon" style="font-size:20px;width:28px;text-align:center" id="eye-icon">🌙</span>
+      <span id="eye-text">护眼模式</span>
+      <span style="margin-left:auto;font-size:12px;color:#888" id="eye-status">关</span>
+    </button>
+  </div>
+</div>
 
 <script>
 // ============================================================
@@ -1403,18 +1611,36 @@ let examSaveDebounce = null;
 //  Tab 切换
 // ============================================================
 async function switchTab(idx) {
-  document.querySelectorAll('.header-nav button').forEach((b, i) => b.classList.toggle('active', i === idx));
-  document.querySelectorAll('.tab-content').forEach((t, i) => t.classList.toggle('active', i === idx));
-  if (idx === 0) await renderDashboard();
-  if (idx === 1) await initPracticeTab();
-  if (idx === 2) await initExamTab();
-  if (idx === 3) await renderStatistics();
-  if (idx === 4) await renderQuestionTable();
+  console.log('switchTab called, idx=' + idx);
+  try {
+    document.querySelectorAll('.header-nav button').forEach((b, i) => b.classList.toggle('active', i === idx));
+    document.querySelectorAll('.tab-content').forEach((t, i) => {
+      t.classList.toggle('active', i === idx);
+      // JS兜底：强制设置当前tab显示
+      t.style.display = (i === idx) ? 'block' : 'none';
+    });
+    
+    // 打印当前active tab
+    var activeTab = document.querySelector('.tab-content.active');
+    console.log('active tab id:', activeTab ? activeTab.id : 'none');
+    
+    if (idx === 0) await renderDashboard();
+    if (idx === 1) await initPracticeTab();
+    if (idx === 2) await initExamTab();
+    if (idx === 3) await renderStatistics();
+    if (idx === 4) await renderQuestionTable();
 
-  // 如果切换到非考试 tab 且考试正在进行，计时器继续运行
-  if (idx !== 2 && examTimer) {
-    // 计时器不暂停，切换回来时状态自动同步
+    // 如果切换到非考试 tab 且考试正在进行，计时器继续运行
+    if (idx !== 2 && examTimer) {
+      // 计时器不暂停，切换回来时状态自动同步
+    }
+  } catch(e) {
+    console.error('switchTab ERROR:', e.message, e.stack);
   }
+  
+  // 切页后始终关闭手机菜单（即使render出错也关闭）
+  console.log('hideMobileMenu called from switchTab');
+  hideMobileMenu();
 }
 
 document.querySelectorAll('.header-nav button').forEach(btn => {
@@ -2434,9 +2660,10 @@ async function showCategoryPanel() {
 async function selectCategory(cat) {
   practiceCategory = cat;
   practiceCollectionId = null;
-  // 隐藏分类面板，显示刷题控制面板
+  // 隐藏分类面板，显示刷题控制面板并默认折叠
   document.getElementById('practice-category-panel').style.display = 'none';
   document.getElementById('practice-ctrl').style.display = 'block';
+  togglePracticeCtrl(true);
 
   // 设置分类筛选器的值
   const catSelect = document.getElementById('p-category');
@@ -2584,12 +2811,16 @@ function togglePracticeCtrl(collapse) {
   const btn = document.getElementById('ctrl-collapse-btn');
   if (collapse) {
     ctrl.classList.add('collapsed');
-    btn.textContent = '🔽 展开';
-    btn.onclick = () => togglePracticeCtrl(false);
+    if (window.innerWidth <= 480) {
+      ctrl.classList.remove('expanded');
+    }
+    if (btn) { btn.textContent = '🔽 展开'; btn.onclick = () => togglePracticeCtrl(false); }
   } else {
     ctrl.classList.remove('collapsed');
-    btn.textContent = '🔼 收起';
-    btn.onclick = () => togglePracticeCtrl(true);
+    if (window.innerWidth <= 480) {
+      ctrl.classList.add('expanded');
+    }
+    if (btn) { btn.textContent = '🔼 收起'; btn.onclick = () => togglePracticeCtrl(true); }
   }
 }
 
@@ -2735,9 +2966,11 @@ async function startPracticeInternal() {
   practiceAutoAdvanceTimer = null;
   practiceNavigating = false;
   practiceIndex = 0;
-  
-  // 手机模式下初始化侧边栏按钮
-  updateSidebarToggleButton();
+  // 手机模式下关闭弹窗
+  const mobilePopup = document.getElementById('practice-sidebar');
+  if (mobilePopup && mobilePopup.classList.contains('mobile-popup')) {
+    mobilePopup.classList.remove('mobile-popup');
+  }
   
   document.getElementById('practice-container').style.display = 'flex';
   togglePracticeCtrl(true);
@@ -2823,57 +3056,53 @@ function practiceGoTo(idx) {
   const sidebar = document.getElementById('practice-sidebar');
   if (sidebar && sidebar.classList.contains('mobile-popup')) {
     sidebar.classList.remove('mobile-popup');
-    updateSidebarToggleButton();
   }
   renderPracticeQuestion();
   practiceNavigating = false;
 }
 
-function updateSidebarToggleButton() {
-  const showBtn = document.getElementById('practice-sidebar-show');
-  if (!showBtn) return;
-  showBtn.innerHTML = '☰';
-}
-
 function toggleMobileMenu() {
-  const nav = document.querySelector('.header-nav');
-  const ctrl = document.getElementById('practice-ctrl');
-  const examCfg = document.getElementById('exam-config');
+  console.log('toggleMobileMenu called');
+  const panel = document.getElementById('mobile-menu-panel');
+  const overlay = document.getElementById('mobile-menu-overlay');
   const menuBtn = document.getElementById('mobile-menu-btn');
-  const isOpen = nav.classList.contains('mobile-show');
+  if (!panel || !overlay) { console.log('panel/overlay not found'); return; }
+  const isOpen = panel.classList.contains('show');
+  console.log('menu open:', isOpen);
   if (isOpen) {
-    nav.classList.remove('mobile-show');
-    if (ctrl) ctrl.classList.remove('mobile-show');
-    if (examCfg) examCfg.classList.remove('mobile-show');
+    panel.classList.remove('show');
+    overlay.classList.remove('show');
     menuBtn.innerHTML = '☰';
   } else {
-    nav.classList.add('mobile-show');
-    if (ctrl) ctrl.classList.add('mobile-show');
-    if (examCfg) examCfg.classList.add('mobile-show');
+    panel.classList.add('show');
+    overlay.classList.add('show');
     menuBtn.innerHTML = '✕';
   }
 }
 
+function hideMobileMenu() {
+  const panel = document.getElementById('mobile-menu-panel');
+  const overlay = document.getElementById('mobile-menu-overlay');
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  if (!panel || !overlay) return;
+  panel.classList.remove('show');
+  overlay.classList.remove('show');
+  if (menuBtn) menuBtn.innerHTML = '☰';
+}
+
 function togglePracticeSidebar() {
   const sidebar = document.getElementById('practice-sidebar');
-  const showBtn = document.getElementById('practice-sidebar-show');
-  if (!sidebar || !showBtn) return;
+  if (!sidebar) return;
   
   // 手机/平板：弹窗模式
   if (window.innerWidth <= 900) {
-    if (sidebar.classList.contains('mobile-popup')) {
-      sidebar.classList.remove('mobile-popup');
-      showBtn.innerHTML = '☰';
-    } else {
-      sidebar.classList.add('mobile-popup');
-      showBtn.innerHTML = '✕';
-    }
+    sidebar.classList.toggle('mobile-popup');
     return;
   }
   
   // 桌面端
-  const isCollapsed = sidebar.classList.toggle('collapsed');
-  showBtn.style.display = isCollapsed ? 'flex' : 'none';
+  sidebar.classList.toggle('collapsed');
+  // p-card-btn 始终在底部导航栏可见，无需额外显示/隐藏按钮
 }
 
 async function renderPracticeQuestion() {
@@ -3694,14 +3923,14 @@ function renderExamQuestionNav() {
 
 function toggleExamSidebar() {
   const sidebar = document.getElementById('exam-sidebar');
-  const showBtn = document.getElementById('exam-sidebar-show');
-  if (sidebar.classList.contains('collapsed')) {
-    sidebar.classList.remove('collapsed');
-    showBtn.style.display = 'none';
-  } else {
-    sidebar.classList.add('collapsed');
-    showBtn.style.display = 'flex';
+  if (!sidebar) return;
+  // 手机/平板：弹窗模式
+  if (window.innerWidth <= 900) {
+    sidebar.classList.toggle('show-popup');
+    return;
   }
+  // 桌面端：折叠模式
+  sidebar.classList.toggle('collapsed');
 }
 
 async function renderExamQuestion() {
@@ -3779,6 +4008,11 @@ function examSelectOption(el, label) {
 
 function examGoTo(idx) {
   examCurrentIndex = idx;
+  // 手机弹窗模式选中后关闭
+  const sidebar = document.getElementById('exam-sidebar');
+  if (sidebar && sidebar.classList.contains('show-popup')) {
+    sidebar.classList.remove('show-popup');
+  }
   renderExamQuestion();
 }
 
@@ -4865,38 +5099,131 @@ async function startWrongBookPractice() {
     }
   });
 
-  // 手机/平板左右滑动切换题目
+  // 手机/平板左右滑动切换题目（卡片式平滑切题）
   (function setupSwipe() {
-    let touchStartX = 0, touchStartY = 0, swipePending = false;
-    document.addEventListener('touchstart', function(e) {
-      if (e.touches.length === 1) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }
-    }, { passive: true });
-    document.addEventListener('touchend', function(e) {
-      if (swipePending) return;
-      if (!e.changedTouches.length) return;
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      
+    let startX = 0, startY = 0, isSwiping = false;
+    let cardEl = null;
+    const THRESHOLD = 80;
+    
+    function getCard() {
+      return document.querySelector('#practice-area .question-card') || document.querySelector('#exam-question-area .question-card');
+    }
+    
+    function isActive() {
       const isPractice = document.getElementById('tab-1').classList.contains('active') && document.getElementById('practice-container').style.display !== 'none';
       const isExam = document.getElementById('tab-2').classList.contains('active') && document.getElementById('exam-running').style.display !== 'none';
-      if (!isPractice && !isExam) return;
-      
-      swipePending = true;
-      if (dx < 0) {
-        if (isPractice && typeof practiceNext === 'function') practiceNext();
-        else if (isExam && typeof examNext === 'function') examNext();
-      } else {
-        if (isPractice && typeof practicePrev === 'function') practicePrev();
-        else if (isExam && typeof examPrev === 'function') examPrev();
+      return { practice: isPractice, exam: isExam };
+    }
+    
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) {
+        const active = isActive();
+        if (!active.practice && !active.exam) return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        cardEl = getCard();
+        if (cardEl) {
+          cardEl.style.transition = 'none';
+        }
+        isSwiping = false;
       }
-      setTimeout(function() { swipePending = false; }, 300);
-    });
+    }, { passive: true });
+    
+    document.addEventListener('touchmove', function(e) {
+      if (!cardEl) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+      if (!isSwiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+        isSwiping = true;
+      }
+      if (!isSwiping) return;
+      e.preventDefault();
+      cardEl.style.transform = 'translateX(' + dx + 'px)';
+    }, { passive: false });
+    
+    document.addEventListener('touchend', function(e) {
+      if (!cardEl || !isSwiping) { cardEl = null; return; }
+      var ct = e.changedTouches[0] || e.changedTouches.item(0);
+      if (!ct) { cardEl = null; return; }
+      const dx = ct.clientX - startX;
+      const active = isActive();
+      
+      cardEl.style.transition = 'transform 0.15s ease';
+      
+      if (Math.abs(dx) > THRESHOLD) {
+        // 完成切换
+        if (dx < 0) {
+          cardEl.style.transform = 'translateX(-120%)';
+        } else {
+          cardEl.style.transform = 'translateX(120%)';
+        }
+        
+        setTimeout(function() {
+          if (cardEl) {
+            cardEl.style.transition = 'none';
+            cardEl.style.transform = '';
+          }
+          if (dx < 0) {
+            if (active.practice && typeof practiceNext === 'function') practiceNext();
+            else if (active.exam && typeof examNext === 'function') examNext();
+          } else {
+            if (active.practice && typeof practicePrev === 'function') practicePrev();
+            else if (active.exam && typeof examPrev === 'function') examPrev();
+          }
+          cardEl = null;
+        }, 150);
+      } else {
+        // 弹回原位
+        cardEl.style.transform = 'translateX(0)';
+        setTimeout(function() { cardEl = null; }, 150);
+      }
+    }, { passive: true });
   })();
+
+  // 手机/平板下显示菜单按钮
+  if (window.innerWidth <= 900) {
+    var mb = document.getElementById('mobile-menu-btn');
+    if (mb) mb.style.display = 'inline-flex';
+  }
+  
+  // 手机端刷题配置面板：点击标题栏展开/收起
+  var ctrlHeader = document.querySelector('.ctrl-header');
+  if (ctrlHeader) {
+    ctrlHeader.style.cursor = 'pointer';
+    ctrlHeader.addEventListener('click', function() {
+      if (window.innerWidth <= 480) {
+        var ctrl = document.getElementById('practice-ctrl');
+        if (ctrl) ctrl.classList.toggle('expanded');
+      }
+    });
+  }
+  
+  // 护眼模式初始化
+  if (localStorage.getItem('eyeProtect') === 'on') {
+    document.body.classList.add('eye-protect');
+    updateEyeUI();
+  }
+  
+  // 护眼模式切换
+  window.toggleEyeProtect = function() {
+    document.body.classList.toggle('eye-protect');
+    var isOn = document.body.classList.contains('eye-protect');
+    localStorage.setItem('eyeProtect', isOn ? 'on' : 'off');
+    updateEyeUI();
+  };
+  
+  function updateEyeUI() {
+    var icon = document.getElementById('eye-icon');
+    var status = document.getElementById('eye-status');
+    var globalBtn = document.getElementById('eye-global-btn');
+    var isOn = document.body.classList.contains('eye-protect');
+    if (icon) icon.textContent = isOn ? '☀️' : '🌙';
+    if (status) { status.textContent = isOn ? '开' : '关'; status.style.color = isOn ? '#10b981' : '#888'; }
+    if (globalBtn) globalBtn.textContent = isOn ? '☀️' : '🌙';
+  }
 })();
 </script>
+
+</body>
 </html>
