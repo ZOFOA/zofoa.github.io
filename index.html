@@ -102,8 +102,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-card .exam-actions { display: flex; gap: 6px; }
 
 /* ===== Question Card ===== */
-.question-card { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; animation: cardSlideIn 0.15s ease; }
-@keyframes cardSlideIn { from { transform: translateX(20px); } to { transform: translateX(0); } }
+.question-card { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; }
 .question-meta { display: flex; gap: 12px; margin-bottom: 12px; font-size: 13px; }
 .question-stem { font-size: 19px; font-weight: 600; line-height: 1.8; color: #1a1a1a; margin-bottom: 20px; }
 .option-list { display: flex; flex-direction: column; gap: 10px; }
@@ -142,15 +141,16 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-container { display: flex; gap: 16px; min-height: calc(100vh - 200px); }
 .exam-sidebar { width: 180px; flex-shrink: 0; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 16px; max-height: calc(100vh - 200px); overflow-y: auto; transition: all 0.3s; }
 .exam-sidebar.collapsed { width: 0; padding: 0; overflow: hidden; }
-.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 600; font-size: 14px; }
-.sidebar-toggle-btn { background: none; border: none; font-size: 16px; cursor: pointer; color: #666; padding: 4px; }
-.sidebar-toggle-btn:hover { color: #1a6ff5; }
-.sidebar-nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.sidebar-num { width: 100%; height: 32px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #f0f2f5; color: #666; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, color 0.15s; border: none; }
-.sidebar-num:hover { background: #dbeafe; color: #1a6ff5; }
-.sidebar-num.current { background: #1a6ff5; color: #fff; }
-.sidebar-num.answered { background: #d1fae5; color: #065f46; }
-.sidebar-num.current.answered { background: #10b981; color: #fff; }
+/* ===== 考试侧边栏样式 ===== */
+.exam-sidebar .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 600; font-size: 14px; }
+.exam-sidebar .sidebar-toggle-btn { background: none; border: none; font-size: 16px; cursor: pointer; color: #666; padding: 4px; }
+.exam-sidebar .sidebar-toggle-btn:hover { color: #1a6ff5; }
+.exam-sidebar .sidebar-nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.exam-sidebar .sidebar-num { width: 100%; height: 32px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #f0f2f5; color: #666; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, color 0.15s; border: none; }
+.exam-sidebar .sidebar-num:hover { background: #dbeafe; color: #1a6ff5; }
+.exam-sidebar .sidebar-num.current { background: #1a6ff5; color: #fff; }
+.exam-sidebar .sidebar-num.answered { background: #d1fae5; color: #065f46; }
+.exam-sidebar .sidebar-num.current.answered { background: #10b981; color: #fff; }
 .exam-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
 .exam-main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
 
@@ -216,32 +216,33 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   transition: all 0.3s;
 }
 .practice-sidebar.collapsed { display: none; }
-.sidebar-header {
+/* ===== 刷题侧边栏样式 ===== */
+.practice-sidebar .sidebar-header {
   display: flex; justify-content: space-between; align-items: center;
   font-size: 13px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px;
 }
-.sidebar-toggle-btn {
+.practice-sidebar .sidebar-toggle-btn {
   background: none; border: 1px solid #e8ecf1; border-radius: 6px;
   width: 24px; height: 24px; cursor: pointer; font-size: 12px;
   display: flex; align-items: center; justify-content: center; color: #888;
 }
-.sidebar-toggle-btn:hover { background: #f5f5f5; color: #333; }
-.sidebar-nums {
+.practice-sidebar .sidebar-toggle-btn:hover { background: #f5f5f5; color: #333; }
+.practice-sidebar .sidebar-nums {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
 }
-.sidebar-num {
+.practice-sidebar .sidebar-num {
   width: 100%; height: 32px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 600; cursor: pointer;
   border: 2px solid transparent; transition: background 0.15s, color 0.15s;
 }
-.sidebar-num:hover { background: #dbeafe; color: #1a6ff5; }
-.sidebar-num-answered { background: #dbeafe; color: #1a6ff5; border-color: #93c5fd; }
-.sidebar-num-unanswered { background: #f0f0f0; color: #999; border-color: #e0e0e0; }
-.sidebar-num-wrong { background: #fef2f2; color: #e74c3c; border-color: #fca5a5; }
-.sidebar-num-mastered { background: #ecfdf5; color: #10b981; border-color: #6ee7b7; }
-.sidebar-num-current { border-color: #1a6ff5 !important; box-shadow: 0 0 0 2px rgba(26,111,245,0.2); transform: scale(1.1); }
-.sidebar-num:hover { filter: brightness(0.95); }
+.practice-sidebar .sidebar-num:hover { background: #dbeafe; color: #1a6ff5; }
+.practice-sidebar .sidebar-num-answered { background: #dbeafe; color: #1a6ff5; border-color: #93c5fd; }
+.practice-sidebar .sidebar-num-unanswered { background: #f0f0f0; color: #999; border-color: #e0e0e0; }
+.practice-sidebar .sidebar-num-wrong { background: #fef2f2; color: #e74c3c; border-color: #fca5a5; }
+.practice-sidebar .sidebar-num-mastered { background: #ecfdf5; color: #10b981; border-color: #6ee7b7; }
+.practice-sidebar .sidebar-num-current { border-color: #1a6ff5 !important; box-shadow: 0 0 0 2px rgba(26,111,245,0.2); transform: scale(1.1); }
+.practice-sidebar .sidebar-num:hover { filter: brightness(0.95); }
 
 .practice-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
 .practice-main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
@@ -422,8 +423,9 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 头部导航在手机/平板上由侧滑菜单替代 */
   .header { flex-wrap: wrap; padding: 8px 12px; }
   .header-nav { display: none !important; }
-  /* 护眼按钮在平板/手机端由侧滑菜单提供，避免与固定菜单按钮重叠 */
+  /* 手机/平板顶部空间有限，模式切换和字号在侧滑菜单中 */
   #eye-global-btn { display: none !important; }
+  #font-global-btn { display: none !important; }
   /* 平板端也显示菜单按钮 */
   .mobile-menu-btn {
     display: inline-flex !important;
@@ -497,7 +499,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .flex-row { flex-wrap: wrap; gap: 10px; }
   
   /* 模态框 */
-  .modal-content { max-width: 95vw; padding: 16px; }
+  .modal { max-width: 95vw; padding: 16px; }
   
   /* 题库管理表格 */
   #qbank-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -506,14 +508,33 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 @media (max-width: 480px) {
   /* 隐藏头部导航（手机端由侧滑菜单替代） */
   .header-nav { display: none !important; }
-  /* 手机端刷题配置面板：压缩为单行 */
+  /* 手机端卡片占满宽度、最小化边距 */
+  .container { padding: 0; }
+  .main { padding: 0; }
+  .card { padding: 10px; }
+  .question-card { padding: 12px 10px; border-radius: 6px; margin-bottom: 8px; }
+  .question-stem { font-size: 16px; margin-bottom: 10px; }
+  .question-meta { font-size: 11px; gap: 6px; margin-bottom: 6px; }
+  .option-list { gap: 6px; }
+  /* 选项：紧凑触控区域，禁止hover粘滞 */
+  .option-item { padding: 8px 10px; font-size: 14px; line-height: 1.4; gap: 6px; }
+  .option-label { min-width: 28px; height: 28px; line-height: 28px; font-size: 12px; }
+  /* 手机端禁用option hover（触控会粘滞），覆盖护眼/夜间模式 */
+  .option-item:hover { border-color: #e8ecf1 !important; background: transparent !important; }
+  body.eye-protect .option-item:hover { border-color: #9ec5a4 !important; background: transparent !important; }
+  body.night-mode .option-item:hover { border-color: rgba(255,255,255,0.08) !important; background: transparent !important; }
+  .option-item:active { border-color: #1a6ff5; background: #eef4ff; }
+  /* 紧凑布局 */
+  .practice-main { margin-top: 4px !important; }
+  .exam-main { margin-top: 4px !important; }
+  .mt-16 { margin-top: 8px !important; }
+  /* 手机端刷题配置面板：简洁美观 */
   #practice-ctrl {
-    padding: 3px 6px !important;
-    margin: 0 0 4px 0 !important;
-    line-height: 1.4;
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none;
+    padding: 8px 10px !important;
+    margin: 0 0 6px 0 !important;
+    border-radius: 8px;
+    background: #f8fafc !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
     overflow: hidden;
   }
   #practice-ctrl .card-title { display: none; }
@@ -524,11 +545,10 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     flex-wrap: nowrap !important;
     flex-direction: row !important;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     margin-bottom: 0;
-    white-space: nowrap;
   }
-  #practice-ctrl .btn-sm { width: auto !important; padding: 2px 4px !important; font-size: 10px !important; }
+  #practice-ctrl .btn-sm { width: auto !important; padding: 4px 8px !important; font-size: 12px !important; }
   #practice-ctrl .ctrl-header > div:first-child { display: none !important; }
   #practice-ctrl .compact-btn { font-size: 11px; padding: 2px 4px; margin: 0; flex-shrink: 0; }
   #practice-ctrl #ctrl-collapse-btn { display: none; }
@@ -536,23 +556,25 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     display: flex !important;
     flex-wrap: nowrap !important;
     flex-direction: row !important;
-    gap: 3px;
+    gap: 8px;
     align-items: center;
     overflow: hidden;
     flex: 1;
     min-width: 0;
   }
   #practice-ctrl #ctrl-summary {
-    font-size: 11px !important;
+    font-size: 12px !important;
+    color: #555;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 80px;
+    max-width: 150px;
     display: inline-block;
     flex-shrink: 1;
+    margin-right: auto;
   }
-  #practice-ctrl .btn-outline.btn-sm { font-size: 10px; padding: 2px 4px; flex-shrink: 0; min-width: auto; }
-  #practice-ctrl .btn-label { display: none; }
+  #practice-ctrl .btn-outline.btn-sm { font-size: 12px; padding: 4px 10px; flex-shrink: 0; min-width: auto; border-radius: 6px; }
+  #practice-ctrl .btn-label { display: inline; font-size: 12px; }
   /* 展开时恢复 */
   #practice-ctrl.expanded {
     padding: 8px 10px !important;
@@ -573,8 +595,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   }
   /* 手机题号网格 4列 */
-  .practice-sidebar { grid-template-columns: repeat(4, 1fr) !important; max-height: 100px !important; }
-  .practice-sidebar.mobile-popup { max-height: none !important; grid-template-columns: unset !important; }
+  .practice-sidebar .sidebar-nums { grid-template-columns: repeat(4, 1fr); }
   
   .header h1 { font-size: 16px; }
   .card-title { font-size: 15px; }
@@ -632,6 +653,30 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .header-nav button.active { background: rgba(255,255,255,0.28); color: #fff; font-weight: 600; }
 }
 
+/* ===== 字号调节（仅缩放文字，不动框架） ===== */
+body.font-sm { --fs-scale: 0.85; }
+body.font-lg { --fs-scale: 1.18; }
+body.font-xl { --fs-scale: 1.35; }
+body.font-sm .question-stem,
+body.font-lg .question-stem,
+body.font-xl .question-stem { font-size: calc(19px * var(--fs-scale)) !important; }
+body.font-sm .option-item,
+body.font-lg .option-item,
+body.font-xl .option-item { font-size: calc(17px * var(--fs-scale)) !important; }
+body.font-sm .btn,
+body.font-lg .btn,
+body.font-xl .btn { font-size: calc(14px * var(--fs-scale)) !important; }
+body.font-sm .btn-sm,
+body.font-lg .btn-sm,
+body.font-xl .btn-sm { font-size: calc(12px * var(--fs-scale)) !important; }
+body.font-sm .btn-lg,
+body.font-lg .btn-lg,
+body.font-xl .btn-lg { font-size: calc(16px * var(--fs-scale)) !important; }
+body.font-sm,
+body.font-lg,
+body.font-xl { font-size: calc(14px * var(--fs-scale)) !important; }
+/* font-md 默认，无需额外声明 */
+
 /* ===== 护眼模式（浅绿色调） ===== */
 body.eye-protect { background: #c7edcc; color: #2a3a2a; }
 body.eye-protect .card { background: #d4f0d8; }
@@ -660,6 +705,92 @@ body.eye-protect .mobile-menu-panel .menu-items button:hover { background: #bee6
 body.eye-protect .mobile-menu-panel .menu-header { color: #2a3a2a; }
 body.eye-protect .exam-sidebar { background: #d4f0d8; }
 body.eye-protect .practice-sidebar { background: #d4f0d8; }
+
+/* ===== 夜间模式（iOS 深色风格） ===== */
+body.night-mode { background: #000; color: rgba(255,255,255,0.87); }
+body.night-mode .header { background: #1c1c1e; }
+body.night-mode .card { background: #1c1c1e; box-shadow: none; }
+body.night-mode .card-title { color: rgba(255,255,255,0.92); }
+body.night-mode .question-card { background: #1c1c1e; box-shadow: none; }
+body.night-mode .question-stem { color: rgba(255,255,255,0.92); }
+body.night-mode .question-meta { color: rgba(255,255,255,0.5); }
+body.night-mode .option-item { background: #2c2c2e; border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
+body.night-mode .option-item:hover { background: #3a3a3c; border-color: rgba(255,255,255,0.15); }
+body.night-mode .option-item:active { background: #3a3a3c; border-color: #0a84ff; }
+body.night-mode .option-item.selected { background: rgba(10,132,255,0.15); border-color: #0a84ff; }
+body.night-mode .option-item.correct { background: rgba(48,209,88,0.15); border-color: #30d158; }
+body.night-mode .option-item.wrong { background: rgba(255,69,58,0.15); border-color: #ff453a; }
+body.night-mode .option-label { background: #3a3a3c; color: rgba(255,255,255,0.6); }
+body.night-mode .option-item.selected .option-label { background: #0a84ff; color: #fff; }
+body.night-mode .analysis-box { background: #2c2c2e; color: rgba(255,255,255,0.7); border-left-color: rgba(255,255,255,0.2); }
+body.night-mode .bottom-nav-bar { background: #1c1c1e; border-top-color: rgba(255,255,255,0.08); }
+body.night-mode .btn-outline { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.12); }
+body.night-mode .btn-outline:hover { background: #3a3a3c; color: #fff; border-color: rgba(255,255,255,0.2); }
+body.night-mode .btn-primary { background: #0a84ff; }
+body.night-mode .btn-primary:hover { background: #409cff; }
+body.night-mode .btn-warning { background: #ff9f0a; }
+body.night-mode .btn-danger { background: #ff453a; }
+body.night-mode .btn-success { background: #30d158; }
+body.night-mode .exam-card { background: #1c1c1e; }
+body.night-mode .stat-card { background: #1c1c1e; }
+body.night-mode .form-input, body.night-mode .form-select { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.08); }
+body.night-mode .form-input:focus, body.night-mode .form-select:focus { border-color: #0a84ff; }
+body.night-mode .form-label { color: rgba(255,255,255,0.6); }
+body.night-mode .switch-row { border-bottom-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.87); }
+body.night-mode .toggle { background: #3a3a3c; }
+body.night-mode .toggle.on { background: #0a84ff; }
+body.night-mode .toggle-wrap span { color: rgba(255,255,255,0.87); }
+/* 覆盖考试配置中硬编码的浅色背景 */
+body.night-mode #exam-config-panel [style*="background:#f8fafc"],
+body.night-mode #exam-config-panel [style*="background: #f8fafc"] { background: #2c2c2e !important; color: rgba(255,255,255,0.87); }
+body.night-mode .data-table th { background: #2c2c2e; color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.08); }
+body.night-mode .data-table td { border-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.87); }
+body.night-mode .data-table tr:hover td { background: #2c2c2e; }
+body.night-mode .modal { background: #1c1c1e; }
+body.night-mode .sidebar-num { background: #2c2c2e; color: rgba(255,255,255,0.5); }
+body.night-mode .text-muted { color: rgba(255,255,255,0.4) !important; }
+body.night-mode .category-card { background: #1c1c1e; border-color: transparent; }
+body.night-mode .category-card:hover { border-color: #0a84ff; box-shadow: 0 4px 16px rgba(10,132,255,0.2); }
+body.night-mode .category-card-title { color: rgba(255,255,255,0.92); }
+body.night-mode .category-card-stats { color: rgba(255,255,255,0.5); }
+body.night-mode .category-card-stats .stat-value { color: rgba(255,255,255,0.87); }
+body.night-mode .category-card-progress .progress-bar { background: #3a3a3c; }
+body.night-mode .mobile-menu-panel { background: #1c1c1e; }
+body.night-mode .mobile-menu-panel .menu-header { color: rgba(255,255,255,0.92); }
+body.night-mode .mobile-menu-panel .menu-items button { color: rgba(255,255,255,0.87) !important; border-color: rgba(255,255,255,0.06); }
+body.night-mode .mobile-menu-panel .menu-items button:hover { background: #2c2c2e; }
+body.night-mode .mobile-menu-panel button[onclick*="toggleEye"] { color: rgba(255,255,255,0.87) !important; }
+body.night-mode .exam-sidebar { background: #1c1c1e; }
+body.night-mode .practice-sidebar { background: #1c1c1e; }
+body.night-mode #practice-ctrl { background: #1c1c1e !important; }
+body.night-mode .badge-single { background: rgba(10,132,255,0.15); color: #0a84ff; }
+body.night-mode .badge-multiple { background: rgba(255,159,10,0.15); color: #ff9f0a; }
+body.night-mode .badge-judge { background: rgba(48,209,88,0.15); color: #30d158; }
+body.night-mode .sidebar-header { color: rgba(255,255,255,0.87); border-bottom-color: rgba(255,255,255,0.08); }
+body.night-mode .exam-record-sidebar { background: #1c1c1e; border-color: rgba(255,255,255,0.08); }
+body.night-mode .exam-record-sidebar-header { color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.08); }
+body.night-mode .exam-record-num { background: #2c2c2e; color: rgba(255,255,255,0.5); }
+body.night-mode .exam-record-num:hover { background: #3a3a3c; color: rgba(255,255,255,0.87); }
+body.night-mode .exam-record-num.current { background: #0a84ff; color: #fff; }
+body.night-mode .exam-record-num.correct { background: rgba(48,209,88,0.25); color: #30d158; }
+body.night-mode .exam-record-num.wrong { background: rgba(255,69,58,0.25); color: #ff453a; }
+body.night-mode .progress-bar { background: #3a3a3c; }
+body.night-mode .header-nav { background: #1c1c1e; border-bottom-color: rgba(255,255,255,0.08); }
+body.night-mode .header-nav button { color: rgba(255,255,255,0.5); }
+body.night-mode .header-nav button.active { color: #0a84ff; border-bottom-color: #0a84ff; }
+body.night-mode .header-nav button:hover { color: rgba(255,255,255,0.87); }
+body.night-mode .toast { background: #3a3a3c !important; color: rgba(255,255,255,0.92) !important; }
+body.night-mode .empty { color: rgba(255,255,255,0.3); }
+body.night-mode .eye-toggle-btn { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
+body.night-mode .eye-toggle-btn:hover { background: rgba(255,255,255,0.15); }
+body.night-mode #font-global-btn { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
+body.night-mode #font-global-btn:hover { background: rgba(255,255,255,0.15); }
+/* 夜间模式滚动条 */
+body.night-mode ::-webkit-scrollbar { width: 6px; }
+body.night-mode ::-webkit-scrollbar-track { background: #1c1c1e; }
+body.night-mode ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 3px; }
+body.night-mode ::-webkit-scrollbar-thumb:hover { background: #555; }
+
 /* 护眼模式全局切换按钮 */
 .eye-toggle-btn {
   background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85);
@@ -685,7 +816,8 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
       <button data-tab="4">⚙️ 题库管理</button>
       <button data-tab="5">❓ 使用说明</button>
     </nav>
-    <button class="eye-toggle-btn" id="eye-global-btn" onclick="toggleEyeProtect()" title="护眼模式">🌙</button>
+    <button class="eye-toggle-btn" id="eye-global-btn" onclick="toggleEyeProtect()" title="显示模式切换">🌙 关</button>
+    <button class="eye-toggle-btn" id="font-global-btn" onclick="toggleFontSize()" title="字号大小">A<span style="font-size:10px">A</span></button>
   </div>
 </header>
 
@@ -1044,10 +1176,12 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
   </div>
 
   <div class="card mt-16">
-    <div class="card-title"><span class="icon">⌨️</span> 快捷键</div>
+    <div class="card-title"><span class="icon">⌨️</span> 快捷键与手势</div>
     <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">
       <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600;width:120px"><code>`</code>（反引号键）</td><td style="padding:6px 12px;border:1px solid #e8ecf1">上一题（刷题和考试通用，输入框内自动忽略）</td></tr>
       <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">F2</td><td style="padding:6px 12px;border:1px solid #e8ecf1">下一题（刷题和考试通用，输入框内自动忽略）</td></tr>
+      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">← 左滑</td><td style="padding:6px 12px;border:1px solid #e8ecf1">手机/平板切下一题，滑动时预览相邻题目内容，松手确认切换</td></tr>
+      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">→ 右滑</td><td style="padding:6px 12px;border:1px solid #e8ecf1">手机/平板切上一题</td></tr>
     </table>
   </div>
 
@@ -1110,6 +1244,17 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
   </div>
 
   <div class="card mt-16">
+    <div class="card-title"><span class="icon">🎨</span> 显示与字号</div>
+    <div style="line-height:1.8;font-size:14px;margin-top:8px">
+      <p><b>顶部右侧按钮</b>：网页/平板可见两个快捷按钮。手机端通过侧滑菜单(☰)中操作。</p>
+      <p><b>🌙 显示模式</b>：关(默认白) → ☀️ 护眼(浅绿柔光) → 🌑 夜间(iOS暗黑风格) → 循环切换。</p>
+      <p><b>Aᴬ 字号大小</b>：中(默认) → 大(1.15×) → 超大(1.3×) → 小(0.85×) → 循环切换。</p>
+      <p><b>夜间模式配色</b>：纯黑底色 #000，卡片 #1c1c1e，分隔线半透白，iOS 风格层次分明。</p>
+      <p><b>状态记忆</b>：显示模式和字号选择均自动保存，刷新页面保持设置。</p>
+    </div>
+  </div>
+
+  <div class="card mt-16">
     <div class="card-title"><span class="icon">💾</span> 数据管理</div>
     <div style="line-height:1.8;font-size:14px;margin-top:8px">
       <p><b>存储位置</b>：所有数据（题库、考试记录、收藏集、设置）保存在浏览器 IndexedDB 中，不清除浏览器数据则永久保留。</p>
@@ -1118,6 +1263,15 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
       <p><b>重置刷题进度</b>：清空所有题目的刷题统计（答题次数、对错数、错题标记），不删除题目和考试记录。</p>
       <p><b>重置题库统计</b>：清空考试抽选次数和对错记录。</p>
       <p><b>清空全部数据</b>：⚠️ 删除所有数据，需输入确认文字才执行。</p>
+    </div>
+  </div>
+  <div class="card mt-16">
+    <div class="card-title"><span class="icon">⚠️</span> 免责声明</div>
+    <div style="line-height:1.8;font-size:13px;margin-top:8px;color:#888">
+      <p>本系统为个人学习辅助工具，所有题目内容来源于公开资料整理，仅供学习参考使用。</p>
+      <p>数据存储于浏览器本地（IndexedDB），开发者无法访问用户数据。建议定期导出备份以防数据丢失。</p>
+      <p>系统中涉及的考试名称、标准编号（如GM/T等）仅用于知识学习，不代表任何官方立场。</p>
+      <p>使用者应遵守相关法律法规，不得将本系统用于任何违法违规目的。因使用本系统产生的任何后果由使用者自行承担。</p>
     </div>
   </div>
 </div>
@@ -1146,8 +1300,13 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
   <div style="padding:8px 20px;border-top:1px solid #e8ecf1;margin-top:8px">
     <button onclick="toggleEyeProtect()" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 0;border:none;background:none;font-size:16px;cursor:pointer;color:#333;text-align:left;">
       <span class="menu-icon" style="font-size:20px;width:28px;text-align:center" id="eye-icon">🌙</span>
-      <span id="eye-text">护眼模式</span>
+      <span id="eye-text">显示模式</span>
       <span style="margin-left:auto;font-size:12px;color:#888" id="eye-status">关</span>
+    </button>
+    <button onclick="toggleFontSize()" style="width:100%;display:flex;align-items:center;gap:14px;padding:14px 0;border:none;background:none;font-size:16px;cursor:pointer;color:#333;text-align:left;">
+      <span class="menu-icon" style="font-size:20px;width:28px;text-align:center">🔤</span>
+      <span>字号大小</span>
+      <span style="margin-left:auto;font-size:12px;color:#888" id="font-status">中</span>
     </button>
   </div>
 </div>
@@ -3025,7 +3184,7 @@ async function renderPracticeSidebar() {
       if (i === practiceIndex) cls += 'sidebar-num-current ';
       if (q.in_wrongbook) cls += 'sidebar-num-wrong';
       else if (q.practice_count > 0 && !q.in_wrongbook) cls += 'sidebar-num-mastered';
-      else cls += 'sidebar-num-unpracticed';
+      else cls += 'sidebar-num-unanswered';
       html += '<div class="' + cls + '" onclick="practiceGoTo(' + i + ')" title="第' + (i+1) + '题">' + (i+1) + '</div>';
     });
   }
@@ -3199,8 +3358,8 @@ async function renderPracticeQuestion() {
         </div>
         <div class="analysis-box" id="practice-analysis"></div>
         <div class="mt-16">
-          <button class="btn btn-primary" id="practice-submit-btn" onclick="practiceSubmit()">✅ 确认答案</button>
-          <span id="practice-result-text" style="margin-left:10px;font-size:14px;font-weight:600"></span>
+          ${isMultiple ? `<button class="btn btn-primary" id="practice-submit-btn" onclick="practiceSubmit()" style="display:none">✅ 确认答案</button>` : ''}
+          <span id="practice-result-text" style="display:inline-block;min-height:14px;margin-left:10px;font-size:14px;font-weight:600"></span>
         </div>
       </div>`;
   }
@@ -3230,14 +3389,14 @@ async function renderPracticeQuestion() {
         analysisBox.innerHTML = result.analysisHTML;
         analysisBox.classList.add('show');
       }
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '已作答'; }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.style.display = ''; submitBtn.textContent = '已作答'; }
       // 高亮正确/错误选项
       if (result.correctAnswer) {
         const correctLabels = result.correctAnswer.split('');
         const userLabels = (result.userAnswer || '').split('');
         document.querySelectorAll('#practice-options .option-item').forEach(opt => {
           const label = opt.dataset.label;
-          if (correctLabels.includes(label) && userLabels.includes(label)) opt.classList.add('correct');
+          if (correctLabels.includes(label)) opt.classList.add('correct');
           else if (userLabels.includes(label)) opt.classList.add('wrong');
         });
       }
@@ -3258,14 +3417,13 @@ async function renderPracticeQuestion() {
         analysisBox.innerHTML = `<strong>正确答案：${esc(q.answer)}</strong>${q.analysis ? '<br>' + esc(q.analysis) : ''}`;
         analysisBox.classList.add('show');
       }
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '已作答'; }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.style.display = ''; submitBtn.textContent = '已作答'; }
       // 高亮选项
       const correctLabels = correctAnswer.split('');
       const userLabels = userAnswer.split('');
       document.querySelectorAll('#practice-options .option-item').forEach(opt => {
         const label = opt.dataset.label;
-        if (correctLabels.includes(label) && userLabels.includes(label)) opt.classList.add('correct');
-        else if (correctLabels.includes(label)) opt.classList.add('correct');
+        if (correctLabels.includes(label)) opt.classList.add('correct');
         else if (userLabels.includes(label)) opt.classList.add('wrong');
       });
     }
@@ -3283,9 +3441,9 @@ let practiceAutoAdvanceTimer = null; // 答对自动跳转定时器
 let practiceNavigating = false; // 防止快速导航导致并发渲染
 
 function practiceSelectOption(el, label) {
-  // 已提交答案后禁止修改选项
   const submitBtn = document.getElementById('practice-submit-btn');
-  if (submitBtn && submitBtn.disabled) return;
+  // 已提交答案后禁止修改
+  if ((submitBtn && submitBtn.disabled) || practiceResultsMap[practiceQuestions[practiceIndex]?.id]) return;
   
   const isMultiple = el.dataset.multiple === 'true';
 
@@ -3297,12 +3455,15 @@ function practiceSelectOption(el, label) {
       practiceSelectedLabels.push(label);
       el.classList.add('selected');
     }
+    // 多选：至少选一个才显示确认按钮
+    if (submitBtn) submitBtn.style.display = practiceSelectedLabels.length > 0 ? '' : 'none';
   } else {
-    // Single choice / judge: deselect all others, then auto-submit
+    // 单选/判断：选中后立即锁定，禁止改选
     document.querySelectorAll('#practice-options .option-item').forEach(opt => opt.classList.remove('selected'));
     practiceSelectedLabels = [label];
     el.classList.add('selected');
-    // 单选/判断题选中后自动确认答案
+    // 锁定所有选项
+    document.querySelectorAll('#practice-options .option-item').forEach(opt => { opt.style.pointerEvents = 'none'; });
     if (practiceAutoSubmitTimer) clearTimeout(practiceAutoSubmitTimer);
     practiceAutoSubmitTimer = setTimeout(() => { practiceAutoSubmitTimer = null; practiceSubmit(); }, 300);
   }
@@ -3312,8 +3473,11 @@ async function practiceSubmit() {
   if (practiceSelectedLabels.length === 0) { showToast('请先选择答案'); return; }
 
   const submitBtn = document.getElementById('practice-submit-btn');
-  if (!submitBtn || submitBtn.disabled) return;
-  submitBtn.disabled = true;
+  // 多选时有按钮，需检查disabled；单选/判断无按钮直接继续
+  if (submitBtn) {
+    if (submitBtn.disabled) return;
+    submitBtn.disabled = true;
+  }
 
   try {
     const q = practiceQuestions[practiceIndex];
@@ -3340,13 +3504,13 @@ async function practiceSubmit() {
   const resultText = document.getElementById('practice-result-text');
   const analysisBox = document.getElementById('practice-analysis');
 
-  // Highlight options: 仅高亮用户选择的选项
+  // 高亮：正确答案绿色，用户错选红色
   document.querySelectorAll('#practice-options .option-item').forEach(opt => {
     const label = opt.dataset.label;
     const isInCorrect = correctAnswer.includes(label);
     const isInUser = practiceSelectedLabels.includes(label);
 
-    if (isInCorrect && isInUser) opt.classList.add('correct');
+    if (isInCorrect) opt.classList.add('correct');
     else if (isInUser) opt.classList.add('wrong');
   });
 
@@ -3946,7 +4110,7 @@ async function renderExamQuestion() {
       <div class="question-meta">
         ${typeBadge[q.type]} <span>分类：${esc(q.category)}</span>
       </div>
-      <div class="question-stem">${examCurrentIndex + 1}. ${esc(q.stem)}</div>
+      <div class="question-stem">${esc(q.stem)}</div>
       <div class="option-list" id="exam-options">
         ${opts.map(o => {
           const selected = currentAnswer.includes(o.label);
@@ -3956,6 +4120,8 @@ async function renderExamQuestion() {
           </div>`;
         }).join('')}
       </div>
+      <div class="analysis-box"></div>
+      <div class="mt-16"><span style="display:inline-block;height:14px"></span></div>
     </div>`;
   renderExamQuestionNav();
   
@@ -5099,84 +5265,136 @@ async function startWrongBookPractice() {
     }
   });
 
-  // 手机/平板左右滑动切换题目（卡片式平滑切题）
+  // 手机/平板左右滑动切换题目（并排卡片滑动）
   (function setupSwipe() {
-    let startX = 0, startY = 0, isSwiping = false;
-    let cardEl = null;
-    const THRESHOLD = 80;
-    
+    var startX = 0, startY = 0, swiping = false;
+    var track = null, areaEl = null, cardRef = null;
+    var baseX = 0, timer = null;
+    var THRESHOLD = 60;
+
     function getCard() {
       return document.querySelector('#practice-area .question-card') || document.querySelector('#exam-question-area .question-card');
     }
-    
-    function isActive() {
-      const isPractice = document.getElementById('tab-1').classList.contains('active') && document.getElementById('practice-container').style.display !== 'none';
-      const isExam = document.getElementById('tab-2').classList.contains('active') && document.getElementById('exam-running').style.display !== 'none';
-      return { practice: isPractice, exam: isExam };
+    function activeMode() {
+      var p = document.getElementById('tab-1').classList.contains('active') && document.getElementById('practice-container').style.display !== 'none';
+      var e = document.getElementById('tab-2').classList.contains('active') && document.getElementById('exam-running').style.display !== 'none';
+      if (p) return { area: document.getElementById('practice-area'), idx: practiceIndex, list: practiceQuestions, goNext: practiceNext, goPrev: practicePrev, isExam: false };
+      if (e) return { area: document.getElementById('exam-question-area'), idx: examCurrentIndex, list: examQuestions, goNext: examNext, goPrev: examPrev, isExam: true };
+      return null;
     }
-    
+    function preview(q, idx, isExam) {
+      var b = { single: '<span class="badge badge-single">单选</span>', multiple: '<span class="badge badge-multiple">多选</span>', judge: '<span class="badge badge-judge">判断</span>' };
+      // 考试模式使用 shuffledOptions，刷题模式使用原始 options
+      var o = isExam ? (q.shuffledOptions || []) : (q.options || []);
+      return '<div class="question-card" style="pointer-events:none;animation:none">' +
+        '<div class="question-meta">' + (b[q.type]||'') + ' <span>' + esc(q.category||'') + '</span></div>' +
+        '<div class="question-stem">' + esc(q.stem||'') + '</div>' +
+        (o.length ? '<div class="option-list">' + o.map(function(t,i){return '<div class="option-item"><span class="option-label">'+(isExam ? esc(t.label) : String.fromCharCode(65+i))+'</span><span>'+esc(typeof t==='string'?t:(t.text||t))+'</span></div>';}).join('') + '</div>' + '<div class="analysis-box"></div><div class="mt-16"><span style="display:inline-block;height:14px"></span></div>' :
+         '<div class="analysis-box"></div><div class="mt-16"><span style="display:inline-block;height:14px"></span></div>') +
+        '</div>';
+    }
+    function destroy() {
+      if (timer) { clearTimeout(timer); timer = null; }
+      if (track && track.parentNode) track.parentNode.removeChild(track);
+      track = null; areaEl = null; cardRef = null; swiping = false;
+    }
+
+    // 创建轨道（仅在确认滑动后调用）
+    function createTrack(card, m) {
+      var w = areaEl.offsetWidth || window.innerWidth;
+      track = document.createElement('div');
+      track.style.cssText = 'display:flex;width:100%;';
+      var slot = 0;
+      if (m.idx > 0) {
+        var pd = document.createElement('div'); pd.style.cssText = 'width:100%;flex-shrink:0;';
+        pd.innerHTML = preview(m.list[m.idx-1], m.idx-1, m.isExam); track.appendChild(pd); slot++;
+      }
+      var cw = document.createElement('div'); cw.style.cssText = 'width:100%;flex-shrink:0;';
+      card.style.transition = 'none'; card.style.transform = '';
+      cw.appendChild(card); track.appendChild(cw);
+      baseX = -slot * w; slot++;
+      if (m.idx < m.list.length - 1) {
+        var nd = document.createElement('div'); nd.style.cssText = 'width:100%;flex-shrink:0;';
+        nd.innerHTML = preview(m.list[m.idx+1], m.idx+1, m.isExam); track.appendChild(nd); slot++;
+      }
+      areaEl.appendChild(track);
+      track.style.transform = 'translateX(' + baseX + 'px)';
+    }
+
     document.addEventListener('touchstart', function(e) {
-      if (e.touches.length === 1) {
-        const active = isActive();
-        if (!active.practice && !active.exam) return;
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        cardEl = getCard();
-        if (cardEl) {
-          cardEl.style.transition = 'none';
-        }
-        isSwiping = false;
-      }
+      if (e.touches.length !== 1) return;
+      var m = activeMode();
+      if (!m || m.list.length <= 1) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      // 如果上次滑动轨道残留，先清理
+      if (track) destroy();
+      var card = getCard();
+      if (!card) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      areaEl = m.area;
+      cardRef = card;
+      // 不立即创建轨道，等 touchmove 确认是滑动
     }, { passive: true });
-    
+
     document.addEventListener('touchmove', function(e) {
-      if (!cardEl) return;
-      const dx = e.touches[0].clientX - startX;
-      const dy = e.touches[0].clientY - startY;
-      if (!isSwiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
-        isSwiping = true;
+      if (!cardRef) return;
+      var dx = e.touches[0].clientX - startX;
+      var dy = e.touches[0].clientY - startY;
+      // 首次确认横向滑动时创建轨道
+      if (!swiping && !track && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+        swiping = true;
+        var m = activeMode();
+        if (m && m.list.length > 1) createTrack(cardRef, m);
       }
-      if (!isSwiping) return;
+      if (!swiping || !track) return;
       e.preventDefault();
-      cardEl.style.transform = 'translateX(' + dx + 'px)';
+      var m = activeMode();
+      var tx = baseX + dx;
+      if (m) {
+        if (m.idx === 0 && tx > baseX) tx = baseX + (tx - baseX) * 0.3;
+        if (m.idx === m.list.length - 1 && tx < baseX) tx = baseX + (tx - baseX) * 0.3;
+      }
+      track.style.transform = 'translateX(' + tx + 'px)';
     }, { passive: false });
-    
+
     document.addEventListener('touchend', function(e) {
-      if (!cardEl || !isSwiping) { cardEl = null; return; }
-      var ct = e.changedTouches[0] || e.changedTouches.item(0);
-      if (!ct) { cardEl = null; return; }
-      const dx = ct.clientX - startX;
-      const active = isActive();
-      
-      cardEl.style.transition = 'transform 0.15s ease';
-      
-      if (Math.abs(dx) > THRESHOLD) {
-        // 完成切换
-        if (dx < 0) {
-          cardEl.style.transform = 'translateX(-120%)';
-        } else {
-          cardEl.style.transform = 'translateX(120%)';
-        }
-        
-        setTimeout(function() {
-          if (cardEl) {
-            cardEl.style.transition = 'none';
-            cardEl.style.transform = '';
-          }
-          if (dx < 0) {
-            if (active.practice && typeof practiceNext === 'function') practiceNext();
-            else if (active.exam && typeof examNext === 'function') examNext();
-          } else {
-            if (active.practice && typeof practicePrev === 'function') practicePrev();
-            else if (active.exam && typeof examPrev === 'function') examPrev();
-          }
-          cardEl = null;
-        }, 150);
+      if (!swiping || !track) { cardRef = null; return; }
+      var ct = e.changedTouches[0] || (e.changedTouches && e.changedTouches.item(0));
+      if (!ct) { destroy(); return; }
+      var dx = ct.clientX - startX;
+      var m = activeMode();
+      var w = track.parentNode.offsetWidth || window.innerWidth;
+
+      if (Math.abs(dx) > THRESHOLD && dx < 0 && m && m.idx < m.list.length - 1) {
+        // 下一题：滑出→锁高度→导航→innerHTML覆盖
+        track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
+        track.style.transform = 'translateX(' + (baseX - w) + 'px)';
+        var fn = m.goNext;
+        timer = setTimeout(function() {
+          if (typeof fn === 'function') fn();
+          setTimeout(destroy, 500);
+        }, 310);
+      } else if (Math.abs(dx) > THRESHOLD && dx > 0 && m && m.idx > 0) {
+        // 上一题
+        track.style.transition = 'transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94)';
+        track.style.transform = 'translateX(' + (baseX + w) + 'px)';
+        var fn = m.goPrev;
+        timer = setTimeout(function() {
+          if (typeof fn === 'function') fn();
+          setTimeout(destroy, 500);
+        }, 310);
       } else {
-        // 弹回原位
-        cardEl.style.transform = 'translateX(0)';
-        setTimeout(function() { cardEl = null; }, 150);
+        // 弹回原位 → 复原单卡片
+        track.style.transition = 'transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94)';
+        track.style.transform = 'translateX(' + baseX + 'px)';
+        timer = setTimeout(function() {
+          // 弹回后把卡片移出轨道，恢复原状
+          if (cardRef && track && track.parentNode) {
+            areaEl.appendChild(cardRef);
+          }
+          destroy();
+        }, 260);
       }
     }, { passive: true });
   })();
@@ -5199,29 +5417,74 @@ async function startWrongBookPractice() {
     });
   }
   
-  // 护眼模式初始化
-  if (localStorage.getItem('eyeProtect') === 'on') {
-    document.body.classList.add('eye-protect');
-    updateEyeUI();
-  }
+  // 显示模式初始化（护眼/夜间/关）
+  var themeMode = localStorage.getItem('themeMode') || 'off';
+  if (themeMode === 'eye-protect') document.body.classList.add('eye-protect');
+  else if (themeMode === 'night') document.body.classList.add('night-mode');
+  updateThemeUI();
   
-  // 护眼模式切换
+  // 三态切换：关 → 护眼 → 夜间 → 关
   window.toggleEyeProtect = function() {
-    document.body.classList.toggle('eye-protect');
-    var isOn = document.body.classList.contains('eye-protect');
-    localStorage.setItem('eyeProtect', isOn ? 'on' : 'off');
-    updateEyeUI();
+    if (document.body.classList.contains('eye-protect')) {
+      document.body.classList.remove('eye-protect');
+      document.body.classList.add('night-mode');
+      localStorage.setItem('themeMode', 'night');
+    } else if (document.body.classList.contains('night-mode')) {
+      document.body.classList.remove('night-mode');
+      localStorage.setItem('themeMode', 'off');
+    } else {
+      document.body.classList.add('eye-protect');
+      localStorage.setItem('themeMode', 'eye-protect');
+    }
+    updateThemeUI();
   };
   
-  function updateEyeUI() {
+  function updateThemeUI() {
     var icon = document.getElementById('eye-icon');
     var status = document.getElementById('eye-status');
     var globalBtn = document.getElementById('eye-global-btn');
-    var isOn = document.body.classList.contains('eye-protect');
-    if (icon) icon.textContent = isOn ? '☀️' : '🌙';
-    if (status) { status.textContent = isOn ? '开' : '关'; status.style.color = isOn ? '#10b981' : '#888'; }
-    if (globalBtn) globalBtn.textContent = isOn ? '☀️' : '🌙';
+    var mode = document.body.classList.contains('night-mode') ? 'night' : 
+               document.body.classList.contains('eye-protect') ? 'eye' : 'off';
+    var icons = { off: '🌙', eye: '☀️', night: '🌑' };
+    var labels = { off: '关', eye: '开', night: '夜' };
+    var colors = { off: '#888', eye: '#10b981', night: '#7c8aff' };
+    if (icon) icon.textContent = icons[mode];
+    if (status) { status.textContent = labels[mode]; status.style.color = colors[mode]; }
+    if (globalBtn) globalBtn.textContent = icons[mode] + ' ' + labels[mode];
   }
+
+  // 字号调节：四级循环 小→中→大→超大
+  var fontSizes = ['font-sm', '', 'font-lg', 'font-xl'];
+  var fontLabels = ['小', '中', '大', '超大'];
+  var fontIdx = 1; // 默认"中"
+
+  // 初始化字号
+  var savedFont = localStorage.getItem('fontSize');
+  if (savedFont) {
+    if (savedFont === 'sm') fontIdx = 0;
+    else if (savedFont === 'md') fontIdx = 1;
+    else if (savedFont === 'lg') fontIdx = 2;
+    else if (savedFont === 'xl') fontIdx = 3;
+    applyFontSize();
+  }
+
+  function applyFontSize() {
+    document.body.classList.remove('font-sm', 'font-lg', 'font-xl');
+    var cls = fontSizes[fontIdx];
+    if (cls) document.body.classList.add(cls);
+    var label = fontLabels[fontIdx];
+    localStorage.setItem('fontSize', ['sm','md','lg','xl'][fontIdx]);
+    // 更新UI
+    var fb = document.getElementById('font-global-btn');
+    var fs = document.getElementById('font-status');
+    if (fb) fb.innerHTML = 'A<span style="font-size:10px">A</span> <span style="font-size:11px">' + label + '</span>';
+    if (fs) fs.textContent = label;
+  }
+
+  window.toggleFontSize = function() {
+    fontIdx = (fontIdx + 1) % 4;
+    applyFontSize();
+  };
 })();
 </script>
 
