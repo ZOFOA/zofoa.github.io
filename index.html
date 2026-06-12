@@ -153,6 +153,11 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-sidebar .sidebar-num.current.answered { background: #10b981; color: #fff; }
 .exam-main { flex: 1; min-width: 0; display: flex; flex-direction: column; position: relative; overflow-x: hidden; }
 .exam-main-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 8px; }
+/* 桌面端考试容器锁定高度，不随题目撑大，底部与左侧导航对齐 */
+@media (min-width: 901px) {
+  .exam-container { height: calc(100vh - 140px); min-height: auto; }
+  .exam-sidebar { max-height: calc(100vh - 140px); }
+}
 
 /* ===== Upload Zone ===== */
 .upload-zone { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 40px; text-align: center; transition: all 0.2s; cursor: pointer; }
@@ -445,7 +450,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .practice-main { margin-top: 8px; }
   
   /* 底部导航固定 */
-  .bottom-nav-bar { 
+  .bottom-nav-bar, #exam-bottom-nav { 
     position: fixed; bottom: 0; left: 0; right: 0; 
     padding: 8px 10px; z-index: 100; 
     background: #fff; border-top: 1px solid #e8ecf1;
@@ -699,7 +704,7 @@ body.eye-protect .option-item { border-color: #9ec5a4; color: #2a3a2a; }
 body.eye-protect .option-item:hover { background: #bee6c4; }
 body.eye-protect .question-meta { color: #4a6a4a; }
 body.eye-protect .analysis-box { background: #e8f5e0; color: #4a6a2a; border-left-color: #8bc49a; }
-body.eye-protect .bottom-nav-bar { background: #d4f0d8; border-top-color: #9ec5a4; }
+body.eye-protect .bottom-nav-bar, body.eye-protect #exam-bottom-nav { background: #d4f0d8; border-top-color: #9ec5a4; }
 body.eye-protect .exam-card { background: #d4f0d8; }
 body.eye-protect .data-table th { background: #b8dcc0; color: #2a3a2a; border-color: #9ec5a4; }
 body.eye-protect .data-table td { border-color: #b8dcc0; }
@@ -737,7 +742,7 @@ body.night-mode .text-red { color: #ff453a !important; }
 body.night-mode .option-label { background: #3a3a3c; color: rgba(255,255,255,0.6); }
 body.night-mode .option-item.selected .option-label { background: #0a84ff; color: #fff; }
 body.night-mode .analysis-box { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); border-left-color: rgba(255,255,255,0.2); }
-body.night-mode .bottom-nav-bar { background: #1c1c1e; border-top-color: rgba(255,255,255,0.08); }
+body.night-mode .bottom-nav-bar, body.night-mode #exam-bottom-nav { background: #1c1c1e; border-top-color: rgba(255,255,255,0.08); }
 body.night-mode .btn-outline { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.12); }
 body.night-mode .btn-outline:hover { background: #3a3a3c; color: #fff; border-color: rgba(255,255,255,0.2); }
 body.night-mode .btn-primary { background: #0a84ff; }
@@ -800,6 +805,54 @@ body.night-mode ::-webkit-scrollbar { width: 6px; }
 body.night-mode ::-webkit-scrollbar-track { background: #1c1c1e; }
 body.night-mode ::-webkit-scrollbar-thumb { background: #3a3a3c; border-radius: 3px; }
 body.night-mode ::-webkit-scrollbar-thumb:hover { background: #555; }
+/* 使用说明快捷键表格 */
+.manual-key { background: #f8f9fa; }
+.manual-table td { border: 1px solid #e8ecf1; }
+/* 夜间模式：使用说明表格 */
+body.night-mode .manual-table td { border-color: rgba(255,255,255,0.08) !important; }
+body.night-mode .manual-table .manual-key { background: #2c2c2e !important; color: rgba(255,255,255,0.87) !important; }
+/* 错题库模态框 */
+.wrongbook-container { background: #fff; }
+.wrongbook-header { border-bottom-color: #e8ecf1; }
+.wrongbook-group-header { border-top-color: #e8ecf1; }
+.wrongbook-item { background: #f8fafc; }
+/* 夜间模式：错题库容器 */
+body.night-mode .wrongbook-container { background: #1c1c1e !important; }
+body.night-mode .wrongbook-header { border-bottom-color: rgba(255,255,255,0.08) !important; }
+body.night-mode .wrongbook-group-header { border-top-color: rgba(255,255,255,0.08) !important; color: rgba(255,255,255,0.6); }
+body.night-mode .wrongbook-item { background: #2c2c2e !important; }
+body.night-mode .wrongbook-item .text-muted { color: rgba(255,255,255,0.4) !important; }
+/* 夜间模式：考试成绩评分环 */
+body.night-mode .score-ring { border-color: rgba(255,255,255,0.08); }
+body.night-mode .score-ring .score-num { color: rgba(255,255,255,0.92); }
+body.night-mode .score-ring .score-total { color: rgba(255,255,255,0.4); }
+/* 考试试卷题目详情 */
+.exam-detail-item { background: #f8fafc; }
+/* 题库管理题目详情解析 */
+.detail-analysis { background: #f8fafc; }
+/* 逐题回顾 */
+.review-item { background: #f8fafc; }
+.review-answer-box { background: #fff; color: #666; }
+/* 夜间模式：考试试卷题目详情 */
+body.night-mode .exam-detail-item { background: #2c2c2e !important; }
+body.night-mode .detail-analysis { background: #2c2c2e !important; }
+body.night-mode .review-item { background: #2c2c2e !important; }
+body.night-mode .review-answer-box { background: #1c1c1e !important; color: rgba(255,255,255,0.5); }
+/* 夜间模式补充：遗漏的组件 */
+body.night-mode .btn-ghost { color: rgba(255,255,255,0.6); }
+body.night-mode .btn-ghost:hover { background: #2c2c2e; color: rgba(255,255,255,0.87); }
+body.night-mode .chart-bar-label { color: rgba(255,255,255,0.6); }
+body.night-mode .mobile-menu-btn { background: #0a84ff; }
+/* 护眼模式补充：遗漏的组件 */
+body.eye-protect .btn-ghost { color: #4a6a4a; }
+body.eye-protect .btn-ghost:hover { background: #bee6c4; }
+body.eye-protect .chart-bar-label { color: #4a6a4a; }
+body.eye-protect .mobile-menu-btn { background: #3a7a3a; }
+body.eye-protect .manual-key { background: #b8dcc0 !important; color: #2a3a2a !important; }
+body.eye-protect .manual-table td { border-color: #9ec5a4 !important; }
+/* 护眼模式：考试配置面板背景 */
+body.eye-protect #exam-config-panel [style*="background:#f8fafc"],
+body.eye-protect #exam-config-panel [style*="background: #f8fafc"] { background: #b8dcc0 !important; }
 
 /* 护眼模式全局切换按钮 */
 .eye-toggle-btn {
@@ -1187,11 +1240,11 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
 
   <div class="card mt-16">
     <div class="card-title"><span class="icon">⌨️</span> 快捷键与手势</div>
-    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">
-      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600;width:120px"><code>`</code>（反引号键）</td><td style="padding:6px 12px;border:1px solid #e8ecf1">上一题（刷题和考试通用，输入框内自动忽略）</td></tr>
-      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">F2</td><td style="padding:6px 12px;border:1px solid #e8ecf1">下一题（刷题和考试通用，输入框内自动忽略）</td></tr>
-      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">← 左滑</td><td style="padding:6px 12px;border:1px solid #e8ecf1">手机/平板切下一题，滑动时预览相邻题目内容，松手确认切换</td></tr>
-      <tr><td style="padding:6px 12px;border:1px solid #e8ecf1;background:#f8f9fa;font-weight:600">→ 右滑</td><td style="padding:6px 12px;border:1px solid #e8ecf1">手机/平板切上一题</td></tr>
+    <table class="manual-table" style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600;width:120px"><code>`</code>（反引号键）</td><td style="padding:6px 12px">上一题（刷题和考试通用，输入框内自动忽略）</td></tr>
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">F2</td><td style="padding:6px 12px">下一题（刷题和考试通用，输入框内自动忽略）</td></tr>
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">← 左滑</td><td style="padding:6px 12px">手机/平板切下一题，滑动时预览相邻题目内容，松手确认切换</td></tr>
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">→ 右滑</td><td style="padding:6px 12px">手机/平板切上一题</td></tr>
     </table>
   </div>
 
@@ -2401,7 +2454,7 @@ async function viewQuestionDetail(id) {
       <div style="margin-bottom:8px"><span class="badge badge-${q.type}">${typeLabel}</span> <span style="color:#888;font-size:12px;margin-left:8px">${esc(q.category)}</span></div>
       <div style="font-weight:600;line-height:1.6">${esc(q.stem)}</div>
       ${optsHtml}
-      ${q.analysis ? `<div style="margin-top:12px;padding:10px;background:#f8fafc;border-radius:8px;font-size:13px"><b>解析：</b>${esc(q.analysis)}</div>` : ''}
+      ${q.analysis ? `<div class="detail-analysis" style="margin-top:12px;padding:10px;border-radius:8px;font-size:13px"><b>解析：</b>${esc(q.analysis)}</div>` : ''}
       <div style="margin-top:12px;font-size:12px;color:#888">
         刷题 ${q.practice_count || 0} 次 · 对 ${q.practice_correct || 0} / 错 ${q.practice_wrong || 0} · 抽选 ${q.exam_selected || 0} 次
         ${q.in_wrongbook ? ' · 🔴 错题' : ''}
@@ -2493,15 +2546,19 @@ function onQfTypeChange() {
 
 function selectJudgeAnswer(labelEl, val) {
   // 清除所有选中样式
+  var isNight = document.body.classList.contains('night-mode');
+  var isEye = document.body.classList.contains('eye-protect');
   document.querySelectorAll('.judge-ans-label').forEach(l => {
-    l.style.borderColor = '#e0e0e0';
-    l.style.background = '#fff';
+    l.style.borderColor = isNight ? 'rgba(255,255,255,0.12)' : (isEye ? '#9ec5a4' : '#e0e0e0');
+    l.style.background = isNight ? '#2c2c2e' : (isEye ? '#d4f0d8' : '#fff');
+    l.style.color = isNight ? 'rgba(255,255,255,0.87)' : '';
     l.querySelector('input').checked = false;
   });
   // 设置选中
   labelEl.querySelector('input').checked = true;
-  labelEl.style.borderColor = '#1a6ff5';
-  labelEl.style.background = '#f0f5ff';
+  labelEl.style.borderColor = isNight ? '#0a84ff' : (isEye ? '#3a7a3a' : '#1a6ff5');
+  labelEl.style.background = isNight ? 'rgba(10,132,255,0.2)' : (isEye ? '#bee6c4' : '#f0f5ff');
+  labelEl.style.color = isNight ? '#fff' : '';
 }
 
 function renderQfOptions(options) {
@@ -4355,7 +4412,7 @@ async function submitExam() {
           const q = dr.questionSnapshot;
           const opts = q.shuffledOptions || q.options.map((text, idx) => ({ label: String.fromCharCode(65 + idx), text }));
           return `
-          <div class="mt-12" style="padding:16px;background:#f8fafc;border-radius:8px;border-left:4px solid ${dr.isCorrect ? '#10b981' : '#e74c3c'}">
+          <div class="review-item mt-12" style="padding:16px;border-radius:8px;border-left:4px solid ${dr.isCorrect ? '#10b981' : '#e74c3c'}">
             <div class="flex-row mb-8">
               ${typeBadge[q.type]} <span>${esc(q.category)}</span>
               <span style="font-weight:600;margin-left:auto">${dr.isCorrect ? '<span class="text-green">✅ 正确</span>' : '<span class="text-red">❌ 错误</span>'}</span>
@@ -4375,7 +4432,7 @@ async function submitExam() {
                 ${isCorrectOpt ? '<span style="margin-left:auto;color:#10b981">正确答案</span>' : ''}
               </div>`;
             }).join('')}
-            <div style="margin-top:10px;padding:10px;background:#fff;border-radius:6px;font-size:13px;color:#666">
+            <div class="review-answer-box" style="margin-top:10px;padding:10px;border-radius:6px;font-size:13px">
               <strong>正确答案：${esc(dr.correctAnswer)}</strong>
               ${q.analysis ? '<br>解析：' + esc(q.analysis) : ''}
             </div>
@@ -4500,6 +4557,10 @@ async function renderTypeChart(records) {
     document.getElementById('chart-type').innerHTML = '<div class="empty"><p>暂无数据</p></div>';
     return;
   }
+  // 批量预加载题目，避免循环内逐条查询
+  const allQs = await getAllQuestions();
+  const qMap = {};
+  allQs.forEach(q => { qMap[q.id] = q; });
   const typeStats = { single: { total: 0, correct: 0 }, multiple: { total: 0, correct: 0 }, judge: { total: 0, correct: 0 } };
   for (const r of records) {
     if (!r.questions) continue;
@@ -4507,7 +4568,7 @@ async function renderTypeChart(records) {
       const qMeta = r.questions[i];
       const qAnswer = r.answers?.[qMeta.id];
       if (!qAnswer) continue;
-      const q = await getQuestionById(qMeta.id);
+      const q = qMap[qMeta.id];
       if (!q) continue;
       if (!typeStats[q.type]) typeStats[q.type] = { total: 0, correct: 0 };
       typeStats[q.type].total++;
@@ -4653,7 +4714,7 @@ async function viewExamRecord(id) {
       const isCorrect = userAnswer === displayCorrectAnswer;
       const opts = qMeta.shuffledOptions || q.options.map((text, idx) => ({ label: String.fromCharCode(65 + idx), text }));
       
-      detailsHtml += '<div id="exam-record-q-' + i + '" style="padding:14px;background:#f8fafc;border-radius:8px;border-left:4px solid ' + (isCorrect ? '#10b981' : '#e74c3c') + ';margin-bottom:10px">' +
+      detailsHtml += '<div id="exam-record-q-' + i + '" class="exam-detail-item" style="padding:14px;border-radius:8px;border-left:4px solid ' + (isCorrect ? '#10b981' : '#e74c3c') + ';margin-bottom:10px">' +
         '<div class="flex-row mb-8">' +
             typeBadge[q.type] + ' <span>' + esc(q.category) + '</span>' +
             '<span style="font-weight:600;margin-left:auto">' + (isCorrect ? '<span class="text-green">✅</span>' : '<span class="text-red">❌</span>') + '</span>' +
@@ -5025,8 +5086,8 @@ async function showWrongBook() {
   
   // 构建错题库查看模态框
   let html = `
-    <div style="background:#fff;border-radius:12px;max-width:900px;margin:0 auto;padding:20px;max-height:85vh;overflow-y:auto">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e8ecf1">
+    <div class="wrongbook-container" style="border-radius:12px;max-width:900px;margin:0 auto;padding:20px;max-height:85vh;overflow-y:auto">
+      <div class="wrongbook-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e8ecf1">
         <div style="font-size:18px;font-weight:700">📛 错题库（${wrongQs.length}题）</div>
         <div>
           <button class="btn btn-success btn-sm" onclick="startWrongBookPractice()" style="margin-right:6px">🚀 开始错题测试</button>
@@ -5053,7 +5114,7 @@ async function showWrongBook() {
   
   for (const [type, group] of Object.entries(typeGroups)) {
     if (group.items.length === 0) continue;
-    html += `<div style="font-weight:600;font-size:14px;margin:16px 0 8px;padding:8px 0;border-top:1px solid #e8ecf1">${group.label}（${group.items.length}题）</div>`;
+    html += `<div class="wrongbook-group-header" style="font-weight:600;font-size:14px;margin:16px 0 8px;padding:8px 0;border-top:1px solid #e8ecf1">${group.label}（${group.items.length}题）</div>`;
     
     group.items.forEach(({ q, idx }) => {
       const typeBadge = { 
@@ -5062,11 +5123,11 @@ async function showWrongBook() {
         judge: '<span style="background:#d1fae5;color:#065f46;padding:2px 8px;border-radius:4px;font-size:11px">判断</span>' 
       };
       html += `
-        <div style="padding:12px;margin-bottom:8px;background:#f8fafc;border-radius:8px;border-left:3px solid #e74c3c">
+        <div class="wrongbook-item" style="padding:12px;margin-bottom:8px;border-radius:8px;border-left:3px solid #e74c3c">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
             ${typeBadge[q.type] || ''}
-            <span style="font-size:12px;color:#666;margin-left:8px">${esc(q.category || '未分类')}</span>
-            <span style="margin-left:auto;font-size:12px;color:#ef4444">错误 ${q.practice_wrong || 0} 次</span>
+            <span class="text-muted" style="font-size:12px;margin-left:8px">${esc(q.category || '未分类')}</span>
+            <span class="text-red" style="margin-left:auto;font-size:12px">错误 ${q.practice_wrong || 0} 次</span>
           </div>
           <div style="font-size:13px;font-weight:500;margin-bottom:6px">${idx + 1}. ${esc(q.stem)}</div>
           <div style="font-size:12px;color:#10b981">正确答案：<strong>${esc(q.answer)}</strong></div>
