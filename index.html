@@ -1383,8 +1383,8 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
   <div class="card">
     <div class="card-title"><span class="icon">📖</span> 系统概述</div>
     <p style="margin:8px 0;font-size:14px;line-height:1.8">
-      本系统是一套完整的题库管理与刷题考试工具，支持<b>自定义题库</b>、<b>分题型/分类刷题</b>、<b>模拟考试</b>、<b>错题重练</b>、<b>数据统计</b>、<b>全量备份</b>等功能。
-      所有数据保存在浏览器本地数据库（IndexedDB），无需服务器，打开即用。
+      本系统是一套完整的题库管理与刷题考试工具，支持<b>自定义题库</b>、<b>分题型/分类刷题</b>、<b>模拟考试</b>、<b>错题重练</b>、<b>题目收藏</b>、<b>数据统计</b>、<b>全量备份</b>等功能。
+      所有数据保存在浏览器本地数据库（IndexedDB），无需服务器，打开即用。支持浅色/护眼/夜间三模式，适配桌面/平板/手机全平台，<b>可添加到手机主屏幕作为全屏 App 使用</b>。
     </p>
   </div>
 
@@ -1393,9 +1393,19 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
     <table class="manual-table" style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">
       <tr><td class="manual-key" style="padding:6px 12px;font-weight:600;width:120px"><code>`</code>（反引号键）</td><td style="padding:6px 12px">上一题（刷题和考试通用，输入框内自动忽略）</td></tr>
       <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">F2</td><td style="padding:6px 12px">下一题（刷题和考试通用，输入框内自动忽略）</td></tr>
-      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">← 左滑</td><td style="padding:6px 12px">手机/平板切下一题，滑动时预览相邻题目内容，松手确认切换</td></tr>
-      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">→ 右滑</td><td style="padding:6px 12px">手机/平板切上一题</td></tr>
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">← 左滑</td><td style="padding:6px 12px">手机/平板切下一题，滑动时预览相邻题目内容（含收藏状态），松手确认切换</td></tr>
+      <tr><td class="manual-key" style="padding:6px 12px;font-weight:600">→ 右滑</td><td style="padding:6px 12px">手机/平板切上一题，同上</td></tr>
     </table>
+  </div>
+
+  <div class="card mt-16">
+    <div class="card-title"><span class="icon">🏠</span> 首页概览</div>
+    <div style="line-height:1.8;font-size:14px;margin-top:8px">
+      <p><b>仪表盘</b>：展示题库总数、已刷题数、已掌握数、近期考试次数和正确率概览（含考试数据）。</p>
+      <p><b>快速入口</b>：📛 <b>错题库</b> — 查看全部错题及解析；⭐ <b>我的收藏</b> — 查看收藏题目并导出 XLSX；💾 <b>导出全部数据</b> — 全量 JSON 备份；📥 <b>导入全部数据</b> — 恢复备份。</p>
+      <p><b>最近考试</b>：展示最近 5 条考试记录，点击「查看答卷」可逐题回顾。</p>
+      <p><b>数据管理</b>：提供重置刷题进度、重置题库统计、清空全部数据等管理操作。</p>
+    </div>
   </div>
 
   <div class="card mt-16">
@@ -1425,7 +1435,7 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
     <div style="line-height:1.8;font-size:14px;margin-top:8px">
       <p><b>配置考试</b>：设置考试名称、答题时间（分钟）、及格分数。选择包含的题型和分类（支持按比例分配）。</p>
       <p><b>附加选项</b>：交卷后显示答案、选项乱序（防作弊）、优先抽错题、优先抽未做题。</p>
-      <p><b>考试界面</b>：顶部显示倒计时，左侧题号导航，右侧答题区。底部上一题/下一题/交卷按钮。</p>
+      <p><b>考试界面</b>：顶部显示倒计时，左侧题号导航（极细滚动条不干扰阅读），右侧答题区。每题右上角 ⭐ 可收藏。底部上一题/下一题/交卷按钮。</p>
       <p><b>计时规则</b>：时间用尽自动交卷。切换 Tab 不影响计时（正式考试不可暂停）。</p>
       <p><b>交卷</b>：确认后计算分数、统计对错，生成考试记录。交卷后不可修改答案。</p>
       <p><b>查看答卷</b>：在统计页点击「查看答卷」可逐题回顾，查看每题的对错和正确答案。</p>
@@ -1439,9 +1449,11 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
     <div class="card-title"><span class="icon">📊</span> 统计模块</div>
     <div style="line-height:1.8;font-size:14px;margin-top:8px">
       <p><b>考试历史</b>：列出所有考试记录，显示名称、时间、题数、对错数、分数、是否及格。支持删除和导出。</p>
-      <p><b>分类正确率</b>：按题目分类统计正确率柱状图（绿≥60%，黄＜60%）。</p>
-      <p><b>题型正确率</b>：按单选/多选/判断统计正确率。</p>
-      <p><b>抽选排行</b>：统计各题目被考试抽中的次数（Top 20）。</p>
+      <p><b>分类正确率</b>：按题目分类统计正确率柱状图（绿≥60%，黄＜60%）。数据来源包含刷题和考试记录。</p>
+      <p><b>题型正确率</b>：按单选/多选/判断统计正确率，同样含刷题+考试数据。</p>
+      <p><b>抽选排行</b>：统计各题目被考试抽中的次数（Top 20），支持滚动查看。</p>
+      <p><b>抽选覆盖率</b>：统计题库中曾被考试抽选过的题目占比，展示已覆盖和未覆盖的题数。</p>
+      <p><b>首页仪表盘</b>：展示总题数、已刷题数、已掌握数、正确率概览，数据已包含考试答题。</p>
     </div>
   </div>
 
