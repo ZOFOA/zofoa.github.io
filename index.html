@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="刷题考试">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f0f2f5">
@@ -51,20 +51,20 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 
 /* ===== Buttons ===== */
 .btn { padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
-.btn-primary { background: #1a6ff5; color: #fff; }
-.btn-primary:hover { background: #1558c2; }
+.btn-primary { background: #1a6ff5; color: #fff; border: 1px solid #1558c2; }
+.btn-primary:hover { background: #1558c2; border-color: #0d47a1; }
 .btn-success { background: #10b981; color: #fff; }
 .btn-success:hover { background: #059669; }
-.btn-danger { background: #e74c3c; color: #fff; }
-.btn-danger:hover { background: #c0392b; }
+.btn-danger { background: #e74c3c; color: #fff; border: 1px solid #d63031; }
+.btn-danger:hover { background: #c0392b; border-color: #a93226; }
 .btn-warning { background: #f59e0b; color: #fff; }
 .btn-purple { background: #8b5cf6; color: #fff; }
 .btn-purple:hover { background: #7c3aed; }
 /* 收藏按钮 */
-.btn-fav { background: none; border: 1px solid #e8ecf1; border-radius: 6px; padding: 2px 6px; font-size: 14px; cursor: pointer; transition: none; margin-left: auto; line-height: 1; width: 28px; height: 28px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+.btn-fav { background: none; border: 1px solid #e8ecf1; border-radius: 6px; padding: 0; font-size: 16px; cursor: pointer; transition: none; margin-left: auto; line-height: 1; width: 30px; height: 30px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; color: inherit; overflow: hidden; }
 .btn-fav:hover { border-color: #f59e0b; background: #fffbeb; }
-body.night-mode .btn-fav { border-color: rgba(255,255,255,0.1); }
-body.night-mode .btn-fav:hover { border-color: #f59e0b; background: rgba(245,158,11,0.1); }
+body.night-mode .btn-fav { border-color: rgba(255,255,255,0.12); color: rgba(255,255,255,0.87); }
+body.night-mode .btn-fav:hover { border-color: #f59e0b; background: rgba(245,158,11,0.15); }
 body.night-mode .fav-cancel-btn { background: rgba(245,158,11,0.15) !important; color: #fbbf24 !important; }
 body.eye-protect .fav-cancel-btn { background: #fef3c7 !important; color: #92400e !important; }
 body.eye-protect .btn-fav { border-color: #9ec5a4; }
@@ -79,8 +79,8 @@ body.eye-protect { --fav-answer-bg: #dfebdf; --fav-answer-color: #3a5a3a; --fav-
 .btn-warning:hover { background: #d97706; }
 .btn-outline { background: #fff; color: #1a6ff5; border: 1px solid #1a6ff5; }
 .btn-outline:hover { background: #f0f6ff; }
-.btn-ghost { background: transparent; color: #666; }
-.btn-ghost:hover { background: #f5f5f5; }
+.btn-ghost { background: transparent; color: #666; border: 1px solid #d0d5dd; }
+.btn-ghost:hover { background: #f5f5f5; border-color: #b0b5bd; }
 .btn-sm { padding: 6px 14px; font-size: 13px; border-radius: 8px; }
 .btn-lg { padding: 10px 24px; font-size: 15px; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -148,9 +148,16 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .progress-fill { height: 100%; background: #1a6ff5; border-radius: 4px; transition: width 0.3s; }
 
 /* ===== Exam Timer ===== */
-.exam-timer { font-size: 24px; font-weight: 700; color: #1a6ff5; font-variant-numeric: tabular-nums; }
+.exam-timer { font-size: 20px; font-weight: 700; color: #1a6ff5; font-variant-numeric: tabular-nums; }
 .exam-timer.warn { color: #e74c3c; animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: 0.5; } }
+
+/* ===== 考试信息头部（紧凑单行） ===== */
+.exam-info-card { padding: 8px 14px !important; }
+.exam-info-row { display: flex; align-items: center; gap: 6px; }
+.exam-info-title { font-weight: 600; font-size: 15px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exam-info-meta { display: flex; align-items: center; gap: 10px; white-space: nowrap; font-size: 13px; color: #888; flex-shrink: 0; }
+.exam-submit-btn { padding: 5px 12px; font-size: 13px; flex-shrink: 0; }
 
 /* ===== Question Navigator ===== */
 .q-nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
@@ -411,6 +418,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .mobile-menu-overlay.show { display: block; }
 .mobile-menu-panel {
   position: fixed; top: 0; right: 0; width: 260px; height: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
   background: #fff; z-index: 1101; 
   display: none;
   flex-direction: column;
@@ -520,7 +529,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 手机/平板显示菜单按钮 ☰ */
   .mobile-menu-btn {
     display: inline-flex !important;
-    position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 12px; z-index: 150;
+    position: fixed; top: calc(10px + env(safe-area-inset-top)); right: calc(12px + env(safe-area-inset-right)); z-index: 150;
     background: #1a6ff5; color: #fff; border: none;
     border-radius: 50%; width: 40px; height: 40px;
     font-size: 20px; align-items: center; justify-content: center;
@@ -701,6 +710,12 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   
   /* 考试按钮 */
   .exam-timer { font-size: 14px; }
+  /* 考试头部：手机端两行布局，元素均匀分布 */
+  .exam-info-card { padding: 6px 10px !important; }
+  .exam-info-row { flex-wrap: wrap; gap: 6px; }
+  .exam-info-title { font-size: 14px; width: 100%; flex-basis: 100%; }
+  .exam-info-meta { font-size: 12px; gap: 12px; flex: 1; }
+  .exam-submit-btn { padding: 5px 12px; font-size: 13px; }
   
   /* 间隔缩小 */
   .mt-12 { margin-top: 8px; }
@@ -745,9 +760,10 @@ body.night-mode #wrongbook-modal .badge-judge { background: rgba(16,185,129,0.2)
 body.eye-protect #wrongbook-modal .badge-single { background: #c8e0ff; color: #1e40af; }
 body.eye-protect #wrongbook-modal .badge-multiple { background: #fde68a; color: #92400e; }
 body.eye-protect #wrongbook-modal .badge-judge { background: #a7f3d0; color: #065f46; }
-/* 桌面端（>900px）显示导航栏 */
+/* 桌面端（>900px）显示导航栏，强制隐藏手机菜单按钮 */
 @media (min-width: 901px) {
   .header-nav { display: flex !important; gap: 4px; }
+  .mobile-menu-btn { display: none !important; }
   .header-nav button { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); padding: 8px 16px; border-radius: 6px; font-size: 14px; transition: all 0.2s; }
   .header-nav button:hover { background: rgba(255,255,255,0.22); color: #fff; }
   .header-nav button.active { background: rgba(255,255,255,0.28); color: #fff; font-weight: 600; }
@@ -786,6 +802,8 @@ body.eye-protect .question-stem { color: #2a3a2a; }
 body.eye-protect .option-item { border-color: #9ec5a4; color: #2a3a2a; }
 body.eye-protect .option-item:hover { background: #bee6c4; }
 body.eye-protect .question-meta { color: #4a6a4a; }
+body.eye-protect .exam-info-meta { color: #4a6a4a; }
+body.eye-protect .exam-timer { color: #2563eb; }
 body.eye-protect .analysis-box { background: #e8f5e0; color: #4a6a2a; border-left-color: #8bc49a; }
 body.eye-protect .bottom-nav-bar, body.eye-protect #exam-bottom-nav { background: #d4f0d8; border-top-color: #9ec5a4; }
 body.eye-protect .exam-card { background: #d4f0d8; }
@@ -814,6 +832,9 @@ body.night-mode .card-title { color: rgba(255,255,255,0.92); }
 body.night-mode .question-card { background: #1c1c1e; box-shadow: none; }
 body.night-mode .question-stem { color: rgba(255,255,255,0.92); }
 body.night-mode .question-meta { color: rgba(255,255,255,0.5); }
+body.night-mode .exam-info-meta { color: rgba(255,255,255,0.5); }
+body.night-mode .exam-timer { color: #60a5fa; }
+body.night-mode .exam-timer.warn { color: #ff6b6b; }
 body.night-mode .option-item { background: #2c2c2e; border-color: rgba(255,255,255,0.08); color: rgba(255,255,255,0.87); }
 body.night-mode .option-item:hover { background: #3a3a3c; border-color: rgba(255,255,255,0.15); }
 body.night-mode .option-item:active { background: #3a3a3c; border-color: #0a84ff; }
@@ -828,11 +849,11 @@ body.night-mode .analysis-box { background: rgba(255,255,255,0.06); color: rgba(
 body.night-mode .bottom-nav-bar, body.night-mode #exam-bottom-nav { background: #1c1c1e; border-top-color: rgba(255,255,255,0.08); }
 body.night-mode .btn-outline { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.12); }
 body.night-mode .btn-outline:hover { background: #3a3a3c; color: #fff; border-color: rgba(255,255,255,0.2); }
-body.night-mode .btn-primary { background: #0a84ff; }
-body.night-mode .btn-primary:hover { background: #409cff; }
+body.night-mode .btn-primary { background: #0a84ff; border-color: #409cff; }
+body.night-mode .btn-primary:hover { background: #409cff; border-color: #60b0ff; }
 body.night-mode .btn-warning { background: #ff9f0a; }
 body.night-mode .btn-purple { background: #8b5cf6; }
-body.night-mode .btn-danger { background: #ff453a; }
+body.night-mode .btn-danger { background: #ff453a; border-color: #ff6b6b; }
 body.night-mode .btn-success { background: #30d158; }
 body.night-mode .exam-card { background: #1c1c1e; }
 body.night-mode .stat-card { background: #1c1c1e; }
@@ -920,16 +941,16 @@ body.eye-protect .exam-main-scroll::-webkit-scrollbar-thumb:hover { background: 
 
 /* 夜间模式滚动条 */
 body.night-mode ::-webkit-scrollbar { width: 4px; height: 4px; }
-body.night-mode ::-webkit-scrollbar-track { background: transparent; }
-body.night-mode ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 2px; }
-body.night-mode ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+body.night-mode ::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 2px; }
+body.night-mode ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.28); border-radius: 2px; }
+body.night-mode ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.50); }
 body.night-mode .exam-sidebar::-webkit-scrollbar,
 body.night-mode .exam-main-scroll::-webkit-scrollbar { width: 3px; }
 body.night-mode .exam-sidebar::-webkit-scrollbar-thumb,
-body.night-mode .exam-main-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 1.5px; }
+body.night-mode .exam-main-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.24); border-radius: 1.5px; }
 body.night-mode .exam-sidebar::-webkit-scrollbar-thumb:hover,
-body.night-mode .exam-main-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
-body.night-mode html { scrollbar-color: rgba(255,255,255,0.10) transparent; }
+body.night-mode .exam-main-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.45); }
+body.night-mode html { scrollbar-color: rgba(255,255,255,0.20) transparent; }
 /* 使用说明快捷键表格 */
 .manual-key { background: #f8f9fa; }
 .manual-table td { border: 1px solid #e8ecf1; }
@@ -980,13 +1001,13 @@ body.eye-protect .modal-close-btn { color: #6a8a6a; }
 body.eye-protect .modal-close-btn:hover { color: #2a3a2a; }
 body.night-mode .review-answer-box { background: #1c1c1e !important; color: rgba(255,255,255,0.5); }
 /* 夜间模式补充：遗漏的组件 */
-body.night-mode .btn-ghost { color: rgba(255,255,255,0.6); }
-body.night-mode .btn-ghost:hover { background: #2c2c2e; color: rgba(255,255,255,0.87); }
+body.night-mode .btn-ghost { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.12); }
+body.night-mode .btn-ghost:hover { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.2); }
 body.night-mode .chart-bar-label { color: rgba(255,255,255,0.6); }
 body.night-mode .mobile-menu-btn { background: #0a84ff; }
 /* 护眼模式补充：遗漏的组件 */
-body.eye-protect .btn-ghost { color: #4a6a4a; }
-body.eye-protect .btn-ghost:hover { background: #bee6c4; }
+body.eye-protect .btn-ghost { color: #4a6a4a; border-color: #8bc49a; }
+body.eye-protect .btn-ghost:hover { background: #bee6c4; border-color: #6aad7a; }
 body.eye-protect .chart-bar-label { color: #4a6a4a; }
 body.eye-protect .mobile-menu-btn { background: #3a7a3a; }
 body.eye-protect .manual-key { background: #b8dcc0 !important; color: #2a3a2a !important; }
@@ -1223,16 +1244,14 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
       <!-- 右侧考试内容 -->
       <div class="exam-main">
         <div class="exam-main-scroll">
-          <div class="card">
-            <div class="flex-between">
-              <div>
-                <div style="font-weight:600;font-size:16px" id="exam-running-name"></div>
-          <div class="text-muted mt-8">已答 <span id="exam-answered-count">0</span> / <span id="exam-total-count">0</span></div>
-              </div>
-              <div class="exam-timer" id="exam-timer-display">--:--</div>
-            </div>
-            <div class="mt-12">
-              <button class="btn btn-danger btn-sm" onclick="confirmSubmitExam()">📤 交卷</button>
+          <div class="card exam-info-card">
+            <div class="exam-info-row">
+              <span class="exam-info-title" id="exam-running-name"></span>
+              <span class="exam-info-meta">
+                <span>已答 <span id="exam-answered-count">0</span>/<span id="exam-total-count">0</span></span>
+                <span class="exam-timer" id="exam-timer-display">--:--</span>
+              </span>
+              <button class="btn btn-danger btn-sm exam-submit-btn" onclick="confirmSubmitExam()">📤 交卷</button>
             </div>
           </div>
           <div id="exam-question-area"></div>
@@ -5941,6 +5960,11 @@ async function startWrongBookPractice() {
     if (icon) icon.textContent = icons[mode];
     if (status) { status.textContent = labels[mode]; status.style.color = colors[mode]; }
     if (globalBtn) globalBtn.textContent = icons[mode] + ' ' + labels[mode];
+    // 同步刘海区域/浏览器顶栏颜色
+    var themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (themeMeta) {
+      themeMeta.content = mode === 'night' ? '#000000' : mode === 'eye' ? '#d4f0d8' : '#f0f2f5';
+    }
   }
 
   // 字号调节：四级循环 小→中→大→超大
