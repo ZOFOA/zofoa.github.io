@@ -18,6 +18,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { background: #f0f2f5; }
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #333; min-height: 100vh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+/* iOS 主屏模式：env() 无效时兜底 */
+.ios-standalone body { padding-top: max(44px, env(safe-area-inset-top)); padding-bottom: max(34px, env(safe-area-inset-bottom)); }
+.ios-standalone .header { top: max(44px, env(safe-area-inset-top)); }
 a { color: #1a6ff5; text-decoration: none; }
 button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 
@@ -5914,15 +5917,36 @@ async function startWrongBookPractice() {
     if (mb) mb.style.display = 'inline-flex';
   }
   
-  // 主屏全屏模式：env() 可能失效，用 JS 强制安全区
+  // 主屏全屏模式：强制安全区（env() 在部分 iOS 版本返回 0）
   if (window.matchMedia('(display-mode: standalone)').matches) {
-    var bs = document.body.style;
-    var computedPad = parseInt(getComputedStyle(document.body).paddingTop) || 0;
-    if (computedPad < 20) {
-      bs.paddingTop = '44px';
-      bs.paddingBottom = '34px';
-    }
+    document.documentElement.classList.add('ios-standalone');
   }
+  
+  // 主屏下切后台再返回时，修复滚动位置偏移
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+      // 延迟一下等 iOS 完成视口恢复
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        var examScroll = document.querySelector('.exam-main-scroll');
+        if (examScroll && examScroll.offsetHeight > 0) examScroll.scrollTop = 0;
+        var practiceScroll = document.getElementById('practice-main-scroll');
+        if (practiceScroll && practiceScroll.offsetHeight > 0) practiceScroll.scrollTop = 0;
+      }, 300);
+    }
+  });
+  // iOS 返回时视口可能变化，也监听 resize
+  var _rsTimer = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(_rsTimer);
+    _rsTimer = setTimeout(function() {
+      window.scrollTo(0, 0);
+      var examScroll = document.querySelector('.exam-main-scroll');
+      if (examScroll) examScroll.scrollTop = 0;
+      var practiceScroll = document.getElementById('practice-main-scroll');
+      if (practiceScroll) practiceScroll.scrollTop = 0;
+    }, 300);
+  });
   
   // 手机端刷题配置面板：点击标题栏展开/收起
   var ctrlHeader = document.querySelector('.ctrl-header');
