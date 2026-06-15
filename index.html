@@ -828,7 +828,7 @@ body.eye-protect .exam-sidebar { background: #d4f0d8; }
 body.eye-protect .practice-sidebar { background: #d4f0d8; }
 
 /* ===== 夜间模式（iOS 深色风格） ===== */
-body.night-mode { background: #1c1c1e !important; color: rgba(255,255,255,0.87); }
+body.night-mode { background: #000 !important; color: rgba(255,255,255,0.87); }
 body.night-mode .header { background: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 body.night-mode .card { background: #1c1c1e; box-shadow: none; }
 body.night-mode .card-title { color: rgba(255,255,255,0.92); }
@@ -5971,7 +5971,7 @@ async function startWrongBookPractice() {
     if (globalBtn) globalBtn.textContent = icons[mode] + ' ' + labels[mode];
     // 同步刘海区域/浏览器顶栏颜色
     var themeMeta = document.querySelector('meta[name="theme-color"]');
-    var bgColor = mode === 'night' ? '#1c1c1e' : mode === 'eye' ? '#c7edcc' : '#f0f2f5';
+    var bgColor = mode === 'night' ? '#000000' : mode === 'eye' ? '#c7edcc' : '#f0f2f5';
     if (themeMeta) themeMeta.content = bgColor;
     document.documentElement.style.background = bgColor;
   }
