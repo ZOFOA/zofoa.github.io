@@ -5914,6 +5914,16 @@ async function startWrongBookPractice() {
     if (mb) mb.style.display = 'inline-flex';
   }
   
+  // 主屏全屏模式：env() 可能失效，用 JS 强制安全区
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    var bs = document.body.style;
+    var computedPad = parseInt(getComputedStyle(document.body).paddingTop) || 0;
+    if (computedPad < 20) {
+      bs.paddingTop = '44px';
+      bs.paddingBottom = '34px';
+    }
+  }
+  
   // 手机端刷题配置面板：点击标题栏展开/收起
   var ctrlHeader = document.querySelector('.ctrl-header');
   if (ctrlHeader) {
