@@ -58,7 +58,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 .btn-outline:hover { background: #f0f6ff; }
 .btn-ghost { background: transparent; color: #666; }
 .btn-ghost:hover { background: #f5f5f5; }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-sm { padding: 6px 14px; font-size: 13px; border-radius: 8px; }
 .btn-lg { padding: 10px 24px; font-size: 15px; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -175,17 +175,20 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   cursor: pointer; line-height: 1; padding: 4px; z-index: 10;
 }
 .modal-close-btn:hover { color: #333; }
-/* 底部按钮区：桌面隐藏，手机占满 */
-.modal-actions { display: none; gap: 10px; justify-content: flex-end; margin-top: 20px; position: sticky; bottom: 0; background: #fff; padding: 12px 4px; border-radius: 0 0 12px 12px; box-shadow: 0 -4px 12px rgba(0,0,0,0.08); }
+/* 底部按钮区：桌面行内显示，手机吸底满宽 */
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding: 12px 4px; }
 @media (max-width: 768px) {
-  .modal { padding: 20px 16px 0; overflow-y: auto; overflow-x: hidden; max-height: 95vh; border-radius: 12px 12px 0 0; display: block; }
+  .modal { padding: 0 !important; margin: 0; overflow: hidden; max-height: 95vh; width: 100%; border-radius: 12px; display: flex; flex-direction: column; position: relative; }
+  .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 0 4px; }
   .modal-actions { 
-    display: flex; justify-content: space-between; gap: 8px;
-    padding: 10px 16px; margin: 20px -16px 0;
-    position: sticky; bottom: 0;
+    display: flex; justify-content: center; gap: 12px;
+    padding: 8px 16px;
+    flex-shrink: 0;
+    position: sticky; bottom: 0; background: #fff;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
     border-radius: 0 0 12px 12px;
   }
-  .modal-actions .btn { flex: 1; border-radius: 8px; margin: 0; }
+  .modal-actions .btn { flex: 1; border-radius: 8px; margin: 0; justify-content: center; }
   .modal-close-btn { display: none; }
   .modal h3 { padding-right: 0; }
 }
@@ -226,6 +229,16 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .chart-bar { width: 100%; max-width: 60px; border-radius: 4px 4px 0 0; transition: height 0.5s ease; background: linear-gradient(180deg, #1a6ff5, #3b82f6); }
 .chart-bar-label { font-size: 11px; color: #666; text-align: center; word-break: break-all; }
 .chart-bar-val { font-size: 11px; font-weight: 700; color: #1a6ff5; }
+/* 抽选次数排行：横向滚动 */
+#chart-selected { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#chart-selected .chart-bar-col { flex: 0 0 58px; }
+#chart-selected .chart-bar-wrap { min-height: 160px; }
+#chart-category { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#chart-category .chart-bar-col { min-width: 70px; }
+#chart-category .chart-bar-wrap { min-height: 160px; }
+#chart-type { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#chart-type .chart-bar-col { min-width: 80px; }
+#chart-type .chart-bar-wrap { min-height: 160px; }
 /* 抽选覆盖率进度条 */
 .cover-bar-unselected { background: #e8ecf1; }
 
@@ -278,11 +291,11 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 /* ===== 底部固定导航栏 ===== */
 .bottom-nav-bar {
   display: flex; justify-content: center; align-items: center; gap: 8px;
-  padding: 12px 16px; background: #fff; border-top: 1px solid #e8ecf1;
+  padding: 8px 16px; background: #fff; border-top: 1px solid #e8ecf1;
   flex-shrink: 0; position: sticky; bottom: 0; z-index: 10;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
 }
-.bottom-nav-bar .btn { min-width: 100px; }
+.bottom-nav-bar .btn { min-width: 80px; }
 
 /* ===== Category Practice Panel ===== */
 .category-grid {
@@ -404,17 +417,35 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .mobile-menu-panel .menu-items button .menu-icon { font-size: 20px; width: 28px; text-align: center; }
 
 /* ===== Exam Record Sidebar (历史试卷左侧窗格) ===== */
-.exam-record-container { display: flex; gap: 16px; }
+.exam-record-container { display: flex; gap: 16px; position: relative; }
 .exam-record-sidebar {
   width: 160px; min-width: 160px;
   background: #f8fafc; border-radius: 10px;
-  padding: 12px; max-height: calc(95vh - 100px); overflow-y: auto;
+  padding: 12px; max-height: calc(95vh - 130px); overflow-y: auto;
   border-right: 1px solid #e8ecf1;
 }
+.exam-record-sidebar.hidden { display: none; }
+/* 桌面端侧边栏隐藏后的展开按钮 */
+.exam-record-expand-btn {
+  display: none;
+  position: absolute; top: 2px; left: -44px; z-index: 10;
+  background: rgba(0,0,0,0.08); color: #888; border: none;
+  border-radius: 6px 0 0 6px; width: 32px; height: 36px;
+  font-size: 16px; cursor: pointer; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.exam-record-expand-btn:hover { background: rgba(0,0,0,0.15); color: #555; }
+.exam-record-expand-btn.show { display: inline-flex; }
 .exam-record-sidebar-header {
+  display: flex; justify-content: space-between; align-items: center;
   font-size: 13px; font-weight: 600; color: #333;
   margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e8ecf1;
 }
+.exam-record-sidebar-header button {
+  background: none; border: none; font-size: 18px; cursor: pointer;
+  color: #999; line-height: 1; padding: 0 2px; transition: color 0.15s;
+}
+.exam-record-sidebar-header button:hover { color: #333; }
 .exam-record-sidebar-nums {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
 }
@@ -430,32 +461,28 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-record-num.wrong { background: #fee2e2; color: #991b1b; }
 .exam-record-num.current.correct { background: #10b981; color: #fff; }
 .exam-record-num.current.wrong { background: #e74c3c; color: #fff; }
-.exam-record-main { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(95vh - 100px); padding-right: 8px; }
+.exam-record-main { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(95vh - 130px); padding-right: 8px; }
+/* 手机菜单按钮默认隐藏，由媒体查询控制显示 */
+.mobile-menu-btn { display: none; }
 @media (max-width: 768px) {
   .header-nav { display: none !important; }
   .practice-sidebar { display: none !important; }
-  /* 手机/小平板显示菜单按钮 */
-  .mobile-menu-btn {
-    display: inline-flex !important;
-    position: fixed; top: 10px; right: 12px; z-index: 150;
-    background: #1a6ff5; color: #fff; border: none;
-    border-radius: 50%; width: 40px; height: 40px;
-    font-size: 20px; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
   .exam-record-container { flex-direction: column; max-height: none; }
   .exam-record-sidebar { display: none; }
   .exam-record-sidebar.show-popup {
     display: block !important;
     position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 90vw; max-height: 70vh; z-index: 300;
+    width: 96vw; max-height: 85vh; z-index: 300;
     background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    overflow-y: auto; padding: 14px;
+    overflow-y: auto; padding: 10px;
   }
   .exam-record-sidebar-header { font-size: 15px; margin-bottom: 12px; }
   .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 7px; }
   .exam-record-num { height: 38px; font-size: 14px; }
-  .exam-record-main { max-height: none; }
+  .exam-record-main { max-height: none; padding-right: 4px; }
+  .option-item { padding: 10px 10px; }
+  .exam-detail-item { padding: 10px 8px !important; }
+  .analysis-box { padding: 10px 12px; }
 }
 
 /* ===== 响应式：手机/平板 ===== */
@@ -466,6 +493,15 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 手机/平板顶部空间有限，模式切换和字号在侧滑菜单中 */
   #eye-global-btn { display: none !important; }
   #font-global-btn { display: none !important; }
+  /* 手机/平板显示菜单按钮 ☰ */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    position: fixed; top: 10px; right: 12px; z-index: 150;
+    background: #1a6ff5; color: #fff; border: none;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 20px; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
   
   /* 内容区域 */
   .card { padding: 12px; }
@@ -483,7 +519,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
     box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
     display: flex; justify-content: space-between; align-items: center; gap: 4px;
   }
-  .bottom-nav-bar .btn { min-width: 80px; font-size: 14px; padding: 10px 12px; }
+  .bottom-nav-bar .btn { min-width: 80px; font-size: 15px; padding: 12px 14px; }
   
   /* 手机下侧边栏弹窗模式 — 全屏答题卡 */
   .practice-sidebar.mobile-popup {
@@ -527,9 +563,6 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   
   /* 首页卡片网格 */
   .flex-row { flex-wrap: wrap; gap: 10px; }
-  
-  /* 模态框 */
-  .modal { max-width: 95vw; padding: 16px; }
   
   /* 题库管理表格 */
   #qbank-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -629,23 +662,14 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   #practice-ctrl.expanded .ctrl-body { display: block; }
   #practice-ctrl.expanded .ctrl-header { margin-bottom: 8px; display: flex !important; }
   #practice-ctrl.expanded #ctrl-collapse-btn { display: inline-flex; }
-  /* 移动端菜单切换按钮 - 最右侧 */
-  .mobile-menu-btn {
-    display: inline-flex !important;
-    position: fixed; top: 10px; right: 12px; z-index: 150;
-    background: #1a6ff5; color: #fff; border: none;
-    border-radius: 50%; width: 40px; height: 40px;
-    font-size: 20px; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
   /* 手机题号网格 4列 */
   .practice-sidebar .sidebar-nums { grid-template-columns: repeat(4, 1fr); }
   
   .header h1 { font-size: 16px; }
   .card-title { font-size: 15px; }
-  .bottom-nav-bar .btn { min-width: 64px; padding: 10px 10px; font-size: 14px; }
+  .bottom-nav-bar .btn { min-width: 64px; padding: 12px 12px; font-size: 15px; }
   .btn { padding: 8px 14px; font-size: 13px; }
-  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-sm { padding: 6px 14px; font-size: 13px; border-radius: 8px; }
   
   /* 选项按钮增大触控区域 */
   .option-item { padding: 12px 14px; font-size: 16px; }
@@ -661,26 +685,29 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .stat-card { padding: 12px 8px !important; }
   .stat-card .num { font-size: 22px !important; }
   .stat-card .label { font-size: 11px !important; }
-  .btn-lg { padding: 8px 12px !important; font-size: 13px !important; }
+  .btn-lg { padding: 10px 14px !important; font-size: 13px !important; border-radius: 8px; }
   /* 手机首页按钮堆叠 */
   .flex-row:has(.btn-lg) { flex-direction: column; gap: 6px; }
   .flex-row:has(.btn-lg) .btn { width: 100%; justify-content: center; }
   /* 数据管理按钮区优化 */
   .flex-row:has(.btn-sm) { 
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
-  .flex-row:has(.btn-sm) .btn-sm { width: 100%; justify-content: center; font-size: 12px; padding: 6px 8px; }
+  .flex-row:has(.btn-sm) .btn-sm { width: 100%; justify-content: center; font-size: 13px; padding: 10px 14px; border-radius: 8px; }
   /* 最近考试记录紧凑显示 */
-  .exam-card { padding: 10px 12px !important; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .exam-card { padding: 8px 10px !important; flex-direction: row; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .exam-card .exam-info { flex: 1; min-width: 60%; }
   .exam-card .exam-title { font-size: 13px !important; }
-  .exam-card .exam-meta { font-size: 11px !important; gap: 6px !important; }
-  .exam-card .exam-score .big { font-size: 20px !important; }
+  .exam-card .exam-meta { font-size: 10px !important; gap: 4px !important; }
+  .exam-card .exam-score { min-width: auto !important; text-align: right; }
+  .exam-card .exam-score .big { font-size: 18px !important; }
+  .exam-card .exam-actions { gap: 4px !important; margin-left: auto; }
+  .exam-card .exam-actions .btn { font-size: 11px !important; padding: 4px 8px !important; }
   /* 历史考题：题号导航窗格优化 */
-  .exam-record-sidebar.show-popup { padding: 10px; width: 92vw; }
+  .exam-record-sidebar.show-popup { padding: 8px; width: 96vw; max-height: 85vh; }
   .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .exam-record-num { height: 42px; font-size: 15px; border-radius: 8px; }
-  .exam-record-main { max-height: none; }
 }
 
 /* 错题库模态框样式 */
@@ -778,7 +805,8 @@ body.night-mode .btn-danger { background: #ff453a; }
 body.night-mode .btn-success { background: #30d158; }
 body.night-mode .exam-card { background: #1c1c1e; }
 body.night-mode .stat-card { background: #1c1c1e; }
-body.night-mode .form-input, body.night-mode .form-select { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.08); }
+body.night-mode .form-input, body.night-mode .form-select, body.night-mode input[type="number"] { background: #2c2c2e; color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.08); }
+body.eye-protect input[type="number"] { background: #d4f0d8; color: #2a3a2a; border-color: #9ec5a4; }
 body.night-mode .form-input:focus, body.night-mode .form-select:focus { border-color: #0a84ff; }
 body.night-mode .form-label { color: rgba(255,255,255,0.6); }
 body.night-mode .switch-row { border-bottom-color: rgba(255,255,255,0.06); color: rgba(255,255,255,0.87); }
@@ -814,6 +842,8 @@ body.night-mode .badge-judge { background: rgba(48,209,88,0.15); color: #30d158;
 body.night-mode .sidebar-header { color: rgba(255,255,255,0.87); border-bottom-color: rgba(255,255,255,0.08); }
 body.night-mode .exam-record-sidebar { background: #1c1c1e; border-color: rgba(255,255,255,0.08); }
 body.night-mode .exam-record-sidebar-header { color: rgba(255,255,255,0.87); border-color: rgba(255,255,255,0.08); }
+body.night-mode .exam-record-sidebar-header button { color: rgba(255,255,255,0.45); }
+body.night-mode .exam-record-sidebar-header button:hover { color: rgba(255,255,255,0.87); }
 body.night-mode .exam-record-num { background: #2c2c2e; color: rgba(255,255,255,0.5); }
 body.night-mode .exam-record-num:hover { background: #3a3a3c; color: rgba(255,255,255,0.87); }
 body.night-mode .exam-record-num.current { background: #0a84ff; color: #fff; }
@@ -856,6 +886,8 @@ body.night-mode .score-ring .score-num { color: rgba(255,255,255,0.92); }
 body.night-mode .score-ring .score-total { color: rgba(255,255,255,0.4); }
 /* 考试试卷题目详情 */
 .exam-detail-item { background: #f8fafc; }
+/* 答卷答案/解析区域 */
+.exam-answer-box { margin-top: 10px; padding: 10px; border-radius: 6px; font-size: 13px; background: #f0f4f8; color: #555; }
 /* 题库管理题目详情解析 */
 .detail-analysis { background: #f8fafc; }
 /* 逐题回顾 */
@@ -863,6 +895,8 @@ body.night-mode .score-ring .score-total { color: rgba(255,255,255,0.4); }
 .review-answer-box { background: #fff; color: #666; }
 /* 夜间模式：考试试卷题目详情 */
 body.night-mode .exam-detail-item { background: #2c2c2e !important; }
+body.night-mode .exam-answer-box { background: #1a1a1c; color: rgba(255,255,255,0.65); }
+body.eye-protect .exam-answer-box { background: #dfebdf; color: #3a5a3a; }
 body.night-mode .detail-analysis { background: #2c2c2e !important; }
 body.night-mode .review-item { background: #2c2c2e !important; }
 body.night-mode .modal-actions { background: #1c1c1e; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); }
@@ -2768,9 +2802,10 @@ function showPrompt(message, defaultVal) {
     container.innerHTML = `
       <div class="modal-backdrop" onclick="resolvePrompt(null)">
         <div class="modal" style="max-width:400px" onclick="event.stopPropagation()">
+          <button class="modal-close-btn" onclick="resolvePrompt(null)" title="关闭">✕</button>
           <div style="font-weight:600;margin-bottom:12px">${message}</div>
           <input class="form-input" id="prompt-input" value="${esc(defaultVal || '')}" style="width:100%">
-          <div class="modal-actions">
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
             <button class="btn btn-outline" onclick="resolvePrompt(null)">取消</button>
             <button class="btn btn-primary" onclick="resolvePrompt(document.getElementById('prompt-input').value)">确定</button>
           </div>
@@ -3670,7 +3705,7 @@ async function practiceSubmit() {
   } catch (e) {
     console.error('[practiceSubmit] error:', e);
     showToast('提交失败，请重试');
-    submitBtn.disabled = false;
+    if (submitBtn) submitBtn.disabled = false;
   }
 }
 
@@ -4804,7 +4839,7 @@ async function viewExamRecord(id) {
               '<span>' + esc(o.text) + '</span>' +
             '</div>';
           }).join('') +
-          '<div style="margin-top:10px;padding:10px;background:#fff;border-radius:6px;font-size:13px;color:#666">' +
+          '<div class="exam-answer-box">' +
             '正确答案：' + esc(displayCorrectAnswer) + ' | 你的答案：' + esc(userAnswer || '未作答') +
             (q.analysis ? '<br>解析：' + esc(q.analysis) : '') +
           '</div>' +
@@ -4817,23 +4852,31 @@ async function viewExamRecord(id) {
     '<div class="text-muted mb-16">' + fmtDate(r.start_time) + ' | 得分 ' + r.score + '/' + r.config.totalScore + ' | ' + (r.passed ? '✅ 及格' : '❌ 未及格') + ' | 正确' + r.correctCount + '/错误' + r.wrongCount + ' | 用时' + fmtDuration(r.duration) + '</div>' +
     '<div class="exam-record-container">' +
       '<div class="exam-record-sidebar">' +
-        '<div class="exam-record-sidebar-header">题号导航</div>' +
+        '<div class="exam-record-sidebar-header"><span>题号导航</span><button onclick="event.stopPropagation();toggleExamRecordNav();" title="关闭题号导航">✕</button></div>' +
         '<div class="exam-record-sidebar-nums" id="exam-record-sidebar-nums">' +
           sidebarHtml +
         '</div>' +
       '</div>' +
+      '<button id="exam-record-expand-btn" class="exam-record-expand-btn" onclick="toggleExamRecordNav()" title="展开题号导航">☰</button>' +
       '<div class="exam-record-main" id="exam-record-main">' +
         detailsHtml +
       '</div>' +
     '</div>',
     false,
-    'max-height:95vh;height:95vh;max-width:95vw;width:95vw;',
-    '<button class="btn btn-outline" id="exam-record-nav-btn" onclick="toggleExamRecordNav()" style="display:none">📋 题号</button>'
+    'max-height:95vh;height:95vh;max-width:95vw;width:100%;padding:16px 28px 4px;',
+    '<button class="btn btn-outline" id="exam-record-nav-btn" onclick="toggleExamRecordNav()" style="display:none">📋 题号</button>' +
+    '<button class="btn btn-outline" id="exam-record-close-btn" onclick="closeModal()" style="display:none">关闭</button>'
   );
-  // 移动端显示题号按钮
+  // 移动端/平板显示题号按钮和关闭按钮，桌面端隐藏整个按钮区
   if (window.innerWidth <= 768) {
     var navBtn = document.getElementById('exam-record-nav-btn');
     if (navBtn) navBtn.style.display = 'inline-flex';
+    var closeBtn = document.getElementById('exam-record-close-btn');
+    if (closeBtn) closeBtn.style.display = 'inline-flex';
+  } else {
+    // 桌面端无可见按钮，隐藏整个 actions 容器避免空白占位
+    var actionsDiv = document.querySelector('.modal-actions');
+    if (actionsDiv) actionsDiv.style.display = 'none';
   }
 }
 
@@ -4989,8 +5032,11 @@ function showConfirm(msg, onConfirm, onCancel) {
   container.innerHTML = `
     <div class="modal-backdrop" onclick="closeModal()">
       <div class="modal" onclick="event.stopPropagation()">
-        <h3>⚠️ 确认操作</h3>
-        <p style="color:#555;line-height:1.6">${msg}</p>
+        <button class="modal-close-btn" onclick="closeModal()" title="关闭">✕</button>
+        <div class="modal-body">
+          <h3>⚠️ 确认操作</h3>
+          <p style="color:#555;line-height:1.6">${msg}</p>
+        </div>
         <div class="modal-actions">
           <button class="btn btn-ghost" id="modal-cancel-btn">取消</button>
           <button class="btn btn-danger" id="modal-confirm-btn">确认</button>
@@ -4998,12 +5044,21 @@ function showConfirm(msg, onConfirm, onCancel) {
       </div>
     </div>`;
   document.getElementById('modal-cancel-btn').addEventListener('click', async () => {
-    closeModal();
-    if (onCancel) await onCancel();
+    try {
+      closeModal();
+      if (onCancel) await onCancel();
+    } catch (e) {
+      console.error('[showConfirm] cancel callback error:', e);
+    }
   });
   document.getElementById('modal-confirm-btn').addEventListener('click', async () => {
-    closeModal();
-    await onConfirm();
+    try {
+      closeModal();
+      await onConfirm();
+    } catch (e) {
+      console.error('[showConfirm] confirm callback error:', e);
+      showToast('操作失败');
+    }
   });
 }
 
@@ -5012,9 +5067,12 @@ function showPromptConfirm(msg, expectedText, onConfirm) {
   container.innerHTML = `
     <div class="modal-backdrop" onclick="closeModal()">
       <div class="modal" onclick="event.stopPropagation()">
-        <h3>⚠️ 危险操作</h3>
-        <p style="color:#555;line-height:1.6;margin-bottom:12px">${msg}</p>
-        <input class="form-input" id="modal-prompt-input" placeholder="请输入" autocomplete="off">
+        <button class="modal-close-btn" onclick="closeModal()" title="关闭">✕</button>
+        <div class="modal-body">
+          <h3>⚠️ 危险操作</h3>
+          <p style="color:#555;line-height:1.6;margin-bottom:12px">${msg}</p>
+          <input class="form-input" id="modal-prompt-input" placeholder="请输入" autocomplete="off">
+        </div>
         <div class="modal-actions">
           <button class="btn btn-ghost" onclick="closeModal()">取消</button>
           <button class="btn btn-danger" id="modal-prompt-confirm">确认</button>
@@ -5022,28 +5080,36 @@ function showPromptConfirm(msg, expectedText, onConfirm) {
       </div>
     </div>`;
   document.getElementById('modal-prompt-confirm').addEventListener('click', async () => {
-    const input = document.getElementById('modal-prompt-input').value.trim();
-    if (input !== expectedText) {
-      showToast('输入不匹配，操作已取消');
+    try {
+      const input = document.getElementById('modal-prompt-input').value.trim();
+      if (input !== expectedText) {
+        showToast('输入不匹配，操作已取消');
+        closeModal();
+        return;
+      }
       closeModal();
-      return;
+      await onConfirm();
+    } catch (e) {
+      console.error('[showPromptConfirm] callback error:', e);
+      showToast('操作失败');
     }
-    closeModal();
-    await onConfirm();
   });
 }
 
 function showModal(html, showCancel = true, modalStyle = '', extraBtn = '') {
   const container = document.getElementById('modal-container');
+  const hasActions = showCancel || extraBtn;
   container.innerHTML = `
     <div class="modal-backdrop" onclick="closeModal()">
       <div class="modal" style="max-width:700px;${modalStyle}" onclick="event.stopPropagation()">
         <button class="modal-close-btn" onclick="closeModal()" title="关闭">✕</button>
-        ${html}
+        <div class="modal-body">${html}</div>
+        ${hasActions ? `
         <div class="modal-actions">
           ${extraBtn}
-          <button class="btn btn-outline" onclick="closeModal()">关闭</button>
+          ${showCancel ? '<button class="btn btn-outline" onclick="closeModal()">关闭</button>' : ''}
         </div>
+        ` : ''}
       </div>
     </div>`;
 }
@@ -5054,10 +5120,22 @@ function closeModal() {
   container.style.display = '';
 }
 
-// 移动端答卷查看：题号导航弹出/收起
+// 题号导航切换：手机/平板弹出窗，桌面端隐藏/显示侧边栏
 function toggleExamRecordNav() {
   var sidebar = document.querySelector('.exam-record-sidebar');
-  if (sidebar) sidebar.classList.toggle('show-popup');
+  if (!sidebar) return;
+  var expandBtn = document.getElementById('exam-record-expand-btn');
+  // 手机/平板：切换弹出窗
+  if (window.innerWidth <= 768) {
+    sidebar.classList.toggle('show-popup');
+  } else {
+    // 桌面端：隐藏/显示整个侧边栏，同时切换展开按钮
+    var hidden = sidebar.classList.toggle('hidden');
+    if (expandBtn) {
+      if (hidden) expandBtn.classList.add('show');
+      else expandBtn.classList.remove('show');
+    }
+  }
 }
 
 let examRecordData = null; // 存储当前查看的考试记录数据
@@ -5069,7 +5147,7 @@ function renderExamRecordSidebar() {
   
   const r = examRecordData;
   let html = `<div class="exam-record-sidebar">
-    <div class="exam-record-sidebar-header">题号导航</div>
+    <div class="exam-record-sidebar-header"><span>题号导航</span><button onclick="event.stopPropagation();toggleExamRecordNav();" title="关闭题号导航">✕</button></div>
     <div class="exam-record-sidebar-nums">`;
   
   for (let i = 0; i < r.questions.length; i++) {
@@ -5108,6 +5186,12 @@ function viewExamRecordGoTo(idx) {
   document.querySelectorAll('.exam-record-num').forEach((btn, i) => {
     btn.classList.toggle('current', i === idx);
   });
+  
+  // 手机端关闭题号弹出窗口（如果打开中）
+  var sidebar = document.querySelector('.exam-record-sidebar');
+  if (sidebar && sidebar.classList.contains('show-popup')) {
+    toggleExamRecordNav();
+  }
 }
 let toastTimer = null;
 
@@ -5340,6 +5424,7 @@ async function startWrongBookPractice() {
   } catch (e) {
     console.error('IndexedDB init failed:', e);
     showToast('数据库初始化失败，部分功能可能不可用');
+    return; // DB 不可用，停止后续初始化
   }
 
   // 检查是否有未完成的考试
