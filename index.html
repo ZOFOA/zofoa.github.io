@@ -208,7 +208,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 /* 底部按钮区：桌面行内显示，手机吸底满宽 */
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; padding: 12px 4px; }
 @media (max-width: 768px) {
-  .modal { padding: 0 !important; margin: 0; overflow: hidden; max-height: 95vh; width: 100%; border-radius: 12px; display: flex; flex-direction: column; position: relative; }
+  .modal { padding: 0 !important; margin: 0; overflow: hidden; max-height: 95vh; width: 100%; border-radius: 12px; display: flex; flex-direction: column; position: relative; padding-top: env(safe-area-inset-top) !important; padding-bottom: env(safe-area-inset-bottom) !important; }
   .modal-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 0 4px; }
   .modal-actions { 
     display: flex; justify-content: center; gap: 12px;
@@ -557,7 +557,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 手机下侧边栏弹窗模式 — 全屏答题卡 */
   .practice-sidebar.mobile-popup {
     position: fixed; top: 0; left: 0; bottom: 0; width: 100%; z-index: 200;
-    background: #fff; padding: 20px; border-radius: 0; box-shadow: none;
+    padding: 20px; padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    background: #fff; border-radius: 0; box-shadow: none;
     overflow-y: auto;
     display: flex !important;
     flex-direction: column;
@@ -585,7 +586,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .exam-sidebar.show-popup {
     display: flex !important;
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200;
-    background: #fff; padding: 20px; border-radius: 0; box-shadow: none;
+    padding: 20px; padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    background: #fff; border-radius: 0; box-shadow: none;
     overflow-y: auto; flex-direction: column; flex-wrap: nowrap;
     max-height: 100vh;
   }
@@ -826,7 +828,7 @@ body.eye-protect .practice-sidebar { background: #d4f0d8; }
 
 /* ===== 夜间模式（iOS 深色风格） ===== */
 body.night-mode { background: #000; color: rgba(255,255,255,0.87); }
-body.night-mode .header { background: #1c1c1e; }
+body.night-mode .header { background: #1c1c1e; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 body.night-mode .card { background: #1c1c1e; box-shadow: none; }
 body.night-mode .card-title { color: rgba(255,255,255,0.92); }
 body.night-mode .question-card { background: #1c1c1e; box-shadow: none; }
@@ -902,7 +904,11 @@ body.night-mode .exam-record-num.current { background: #0a84ff; color: #fff; }
 body.night-mode .exam-record-num.correct { background: rgba(48,209,88,0.25); color: #30d158; }
 body.night-mode .exam-record-num.wrong { background: rgba(255,69,58,0.25); color: #ff453a; }
 body.night-mode .exam-record-sidebar.show-popup { background: #1c1c1e; }
+body.night-mode .practice-sidebar.mobile-popup { background: #1c1c1e; }
+body.night-mode .exam-sidebar.show-popup { background: #1c1c1e; }
 body.eye-protect .exam-record-sidebar.show-popup { background: #d4f0d8; }
+body.eye-protect .practice-sidebar.mobile-popup { background: #d4f0d8; }
+body.eye-protect .exam-sidebar.show-popup { background: #d4f0d8; }
 body.night-mode .progress-bar { background: #3a3a3c; }
 body.night-mode .toast { background: #3a3a3c !important; color: rgba(255,255,255,0.92) !important; }
 body.night-mode .empty { color: rgba(255,255,255,0.3); }
@@ -5330,7 +5336,7 @@ function showToast(msg) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'global-toast';
-    toast.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;max-width:80vw;word-break:break-all';
+    toast.style.cssText = 'position:fixed;top:calc(70px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;max-width:80vw;word-break:break-all';
     document.body.appendChild(toast);
   }
   toast.textContent = msg;
@@ -5545,7 +5551,7 @@ async function showWrongBook() {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'wrongbook-modal';
-    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;overflow-y:auto;padding:20px 10px';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;overflow-y:auto;padding:20px 10px;padding-top:calc(20px + env(safe-area-inset-top));padding-bottom:calc(20px + env(safe-area-inset-bottom))';
     modal.addEventListener('click', function(e) { if (e.target === this) closeWrongBook(); });
     document.body.appendChild(modal);
   }
