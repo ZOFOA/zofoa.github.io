@@ -166,9 +166,29 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 
 /* ===== Modal ===== */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.15s; }
-.modal { background: #fff; border-radius: 12px; padding: 28px 32px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-.modal h3 { font-size: 18px; margin-bottom: 16px; }
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.modal { background: #fff; border-radius: 12px; padding: 28px 32px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); position: relative; }
+.modal h3 { font-size: 18px; margin-bottom: 16px; padding-right: 28px; }
+/* 右上角关闭按钮（桌面/平板） */
+.modal-close-btn {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; font-size: 20px; color: #999;
+  cursor: pointer; line-height: 1; padding: 4px; z-index: 10;
+}
+.modal-close-btn:hover { color: #333; }
+/* 底部按钮区：桌面隐藏，手机占满 */
+.modal-actions { display: none; gap: 10px; justify-content: flex-end; margin-top: 20px; position: sticky; bottom: 0; background: #fff; padding: 12px 4px; border-radius: 0 0 12px 12px; box-shadow: 0 -4px 12px rgba(0,0,0,0.08); }
+@media (max-width: 768px) {
+  .modal { padding: 20px 16px 0; overflow-y: auto; overflow-x: hidden; max-height: 95vh; border-radius: 12px 12px 0 0; display: block; }
+  .modal-actions { 
+    display: flex; justify-content: space-between; gap: 8px;
+    padding: 10px 16px; margin: 20px -16px 0;
+    position: sticky; bottom: 0;
+    border-radius: 0 0 12px 12px;
+  }
+  .modal-actions .btn { flex: 1; border-radius: 8px; margin: 0; }
+  .modal-close-btn { display: none; }
+  .modal h3 { padding-right: 0; }
+}
 
 /* ===== Toolbar ===== */
 .toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
@@ -206,6 +226,8 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .chart-bar { width: 100%; max-width: 60px; border-radius: 4px 4px 0 0; transition: height 0.5s ease; background: linear-gradient(180deg, #1a6ff5, #3b82f6); }
 .chart-bar-label { font-size: 11px; color: #666; text-align: center; word-break: break-all; }
 .chart-bar-val { font-size: 11px; font-weight: 700; color: #1a6ff5; }
+/* 抽选覆盖率进度条 */
+.cover-bar-unselected { background: #e8ecf1; }
 
 /* ===== Exam config switch row ===== */
 .switch-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5; }
@@ -382,11 +404,11 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .mobile-menu-panel .menu-items button .menu-icon { font-size: 20px; width: 28px; text-align: center; }
 
 /* ===== Exam Record Sidebar (历史试卷左侧窗格) ===== */
-.exam-record-container { display: flex; gap: 16px; max-height: 70vh; }
+.exam-record-container { display: flex; gap: 16px; }
 .exam-record-sidebar {
   width: 160px; min-width: 160px;
   background: #f8fafc; border-radius: 10px;
-  padding: 12px; max-height: 70vh; overflow-y: auto;
+  padding: 12px; max-height: calc(95vh - 100px); overflow-y: auto;
   border-right: 1px solid #e8ecf1;
 }
 .exam-record-sidebar-header {
@@ -408,19 +430,32 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
 .exam-record-num.wrong { background: #fee2e2; color: #991b1b; }
 .exam-record-num.current.correct { background: #10b981; color: #fff; }
 .exam-record-num.current.wrong { background: #e74c3c; color: #fff; }
-.exam-record-main { flex: 1; min-width: 0; overflow-y: auto; max-height: 70vh; padding-right: 8px; }
+.exam-record-main { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(95vh - 100px); padding-right: 8px; }
 @media (max-width: 768px) {
   .header-nav { display: none !important; }
   .practice-sidebar { display: none !important; }
+  /* 手机/小平板显示菜单按钮 */
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    position: fixed; top: 10px; right: 12px; z-index: 150;
+    background: #1a6ff5; color: #fff; border: none;
+    border-radius: 50%; width: 40px; height: 40px;
+    font-size: 20px; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
   .exam-record-container { flex-direction: column; max-height: none; }
-  .exam-record-sidebar { 
-    width: 100%; min-width: 100%; max-height: 38vh; 
-    padding: 14px;
+  .exam-record-sidebar { display: none; }
+  .exam-record-sidebar.show-popup {
+    display: block !important;
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 90vw; max-height: 70vh; z-index: 300;
+    background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow-y: auto; padding: 14px;
   }
   .exam-record-sidebar-header { font-size: 15px; margin-bottom: 12px; }
   .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 7px; }
   .exam-record-num { height: 38px; font-size: 14px; }
-  .exam-record-main { max-height: 55vh; }
+  .exam-record-main { max-height: none; }
 }
 
 /* ===== 响应式：手机/平板 ===== */
@@ -431,15 +466,6 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 手机/平板顶部空间有限，模式切换和字号在侧滑菜单中 */
   #eye-global-btn { display: none !important; }
   #font-global-btn { display: none !important; }
-  /* 平板端也显示菜单按钮 */
-  .mobile-menu-btn {
-    display: inline-flex !important;
-    position: fixed; top: 10px; right: 12px; z-index: 101;
-    background: #1a6ff5; color: #fff; border: none;
-    border-radius: 50%; width: 40px; height: 40px;
-    font-size: 20px; align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  }
   
   /* 内容区域 */
   .card { padding: 12px; }
@@ -606,7 +632,7 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   /* 移动端菜单切换按钮 - 最右侧 */
   .mobile-menu-btn {
     display: inline-flex !important;
-    position: fixed; top: 10px; right: 12px; z-index: 101;
+    position: fixed; top: 10px; right: 12px; z-index: 150;
     background: #1a6ff5; color: #fff; border: none;
     border-radius: 50%; width: 40px; height: 40px;
     font-size: 20px; align-items: center; justify-content: center;
@@ -651,10 +677,10 @@ input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #ddd; b
   .exam-card .exam-meta { font-size: 11px !important; gap: 6px !important; }
   .exam-card .exam-score .big { font-size: 20px !important; }
   /* 历史考题：题号导航窗格优化 */
-  .exam-record-sidebar { padding: 10px; }
+  .exam-record-sidebar.show-popup { padding: 10px; width: 92vw; }
   .exam-record-sidebar-nums { grid-template-columns: repeat(5, 1fr); gap: 8px; }
   .exam-record-num { height: 42px; font-size: 15px; border-radius: 8px; }
-  .exam-record-main { max-height: 50vh; }
+  .exam-record-main { max-height: none; }
 }
 
 /* 错题库模态框样式 */
@@ -793,6 +819,8 @@ body.night-mode .exam-record-num:hover { background: #3a3a3c; color: rgba(255,25
 body.night-mode .exam-record-num.current { background: #0a84ff; color: #fff; }
 body.night-mode .exam-record-num.correct { background: rgba(48,209,88,0.25); color: #30d158; }
 body.night-mode .exam-record-num.wrong { background: rgba(255,69,58,0.25); color: #ff453a; }
+body.night-mode .exam-record-sidebar.show-popup { background: #1c1c1e; }
+body.eye-protect .exam-record-sidebar.show-popup { background: #d4f0d8; }
 body.night-mode .progress-bar { background: #3a3a3c; }
 body.night-mode .toast { background: #3a3a3c !important; color: rgba(255,255,255,0.92) !important; }
 body.night-mode .empty { color: rgba(255,255,255,0.3); }
@@ -837,6 +865,12 @@ body.night-mode .score-ring .score-total { color: rgba(255,255,255,0.4); }
 body.night-mode .exam-detail-item { background: #2c2c2e !important; }
 body.night-mode .detail-analysis { background: #2c2c2e !important; }
 body.night-mode .review-item { background: #2c2c2e !important; }
+body.night-mode .modal-actions { background: #1c1c1e; box-shadow: 0 -4px 12px rgba(0,0,0,0.4); }
+body.eye-protect .modal-actions { background: #d4f0d8; }
+body.night-mode .modal-close-btn { color: rgba(255,255,255,0.4); }
+body.night-mode .modal-close-btn:hover { color: rgba(255,255,255,0.87); }
+body.eye-protect .modal-close-btn { color: #6a8a6a; }
+body.eye-protect .modal-close-btn:hover { color: #2a3a2a; }
 body.night-mode .review-answer-box { background: #1c1c1e !important; color: rgba(255,255,255,0.5); }
 /* 夜间模式补充：遗漏的组件 */
 body.night-mode .btn-ghost { color: rgba(255,255,255,0.6); }
@@ -850,6 +884,9 @@ body.eye-protect .chart-bar-label { color: #4a6a4a; }
 body.eye-protect .mobile-menu-btn { background: #3a7a3a; }
 body.eye-protect .manual-key { background: #b8dcc0 !important; color: #2a3a2a !important; }
 body.eye-protect .manual-table td { border-color: #9ec5a4 !important; }
+body.eye-protect .cover-bar-unselected { background: rgba(0,0,0,0.08); }
+/* 夜间模式：抽选覆盖率进度条 */
+body.night-mode .cover-bar-unselected { background: #3a3a3c; }
 /* 护眼模式：考试配置面板背景 */
 body.eye-protect #exam-config-panel [style*="background:#f8fafc"],
 body.eye-protect #exam-config-panel [style*="background: #f8fafc"] { background: #b8dcc0 !important; }
@@ -1131,6 +1168,11 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
     <div class="card-title"><span class="icon">🔢</span> 题目被抽选次数排行（Top 20）</div>
     <div id="chart-selected" class="mt-12"></div>
   </div>
+
+  <div class="card mt-16">
+    <div class="card-title"><span class="icon">📋</span> 题目抽选覆盖率统计</div>
+    <div id="selection-coverage" class="mt-12"></div>
+  </div>
 </div>
 
 <!-- ===== TAB 4: 题库管理 ===== -->
@@ -1345,7 +1387,7 @@ body.eye-protect .eye-toggle-btn { background: rgba(0,0,0,0.1); }
 <div id="modal-container"></div>
 
 <!-- 手机菜单按钮与侧滑菜单（在script之前，确保DOM已加载） -->
-<button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display:none">☰</button>
+<button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
 <div class="mobile-menu-overlay" id="mobile-menu-overlay" onclick="hideMobileMenu()"></div>
 <div class="mobile-menu-panel" id="mobile-menu-panel">
   <div class="menu-header">
@@ -4345,7 +4387,6 @@ async function submitExam() {
     const updateKey = q.id;
     if (!wrongQuestionUpdates[updateKey]) {
       wrongQuestionUpdates[updateKey] = {
-        exam_selected: (q.exam_selected || 0) + 1,
         exam_correct: (q.exam_correct || 0) + (isCorrect ? 1 : 0),
         exam_wrong: (q.exam_wrong || 0) + (isCorrect ? 0 : 1),
         last_exam: endTime,
@@ -4492,6 +4533,8 @@ async function renderStatistics() {
   await renderTypeChart(records);
   // Selection count chart
   await renderSelectionChart(records);
+  // Selection coverage stats
+  await renderSelectionCoverage();
 }
 
 async function renderCategoryChart(records) {
@@ -4638,6 +4681,35 @@ async function renderSelectionChart(records) {
     </div>`;
 }
 
+async function renderSelectionCoverage() {
+  const all = await getAllQuestions();
+  const total = all.length;
+  if (total === 0) {
+    document.getElementById('selection-coverage').innerHTML = '<div class="empty"><p>暂无题目数据</p></div>';
+    return;
+  }
+  const selected = all.filter(q => (q.exam_selected || 0) > 0).length;
+  const repeated = all.filter(q => (q.exam_selected || 0) > 1).length;
+  const unselected = total - selected;
+  const selectedPct = Math.round(selected / total * 100);
+  const repeatedPct = Math.round(repeated / total * 100);
+  const unselectedPct = 100 - selectedPct;
+
+  document.getElementById('selection-coverage').innerHTML = `
+    <div class="stat-grid" style="margin-bottom:12px">
+      <div class="stat-card"><div class="num" style="color:#10b981">${selected}</div><div class="label">已抽选（${selectedPct}%）</div></div>
+      <div class="stat-card"><div class="num" style="color:#f59e0b">${repeated}</div><div class="label">重复抽选（${repeatedPct}%）</div></div>
+      <div class="stat-card"><div class="num" style="color:#888">${unselected}</div><div class="label">未抽选（${unselectedPct}%）</div></div>
+    </div>
+    <div style="display:flex;height:28px;border-radius:6px;overflow:hidden;gap:2px">
+      <div class="cover-bar-selected" style="width:${selectedPct}%;background:linear-gradient(180deg,#10b981,#34d399);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;min-width:${selectedPct > 0 ? '40px' : '0'}">${selectedPct > 8 ? selectedPct + '%' : ''}</div>
+      <div class="cover-bar-unselected" style="width:${unselectedPct}%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#888;font-weight:600;min-width:${unselectedPct > 0 ? '40px' : '0'}">${unselectedPct > 8 ? unselectedPct + '%' : ''}</div>
+    </div>
+    <div class="flex-row mt-8" style="gap:16px;font-size:12px;color:#888">
+      <span>🟢 已抽选</span><span>⬜ 未抽选</span><span>🟡 其中重复抽选 ${repeated} 题</span>
+    </div>`;
+}
+
 async function viewExamRecord(id) {
   const r = await getExamRecordById(id);
   if (!r) { showToast('记录不存在'); return; }
@@ -4755,8 +4827,14 @@ async function viewExamRecord(id) {
       '</div>' +
     '</div>',
     false,
-    'max-width:95vw;width:95vw;'
+    'max-height:95vh;height:95vh;max-width:95vw;width:95vw;',
+    '<button class="btn btn-outline" id="exam-record-nav-btn" onclick="toggleExamRecordNav()" style="display:none">📋 题号</button>'
   );
+  // 移动端显示题号按钮
+  if (window.innerWidth <= 768) {
+    var navBtn = document.getElementById('exam-record-nav-btn');
+    if (navBtn) navBtn.style.display = 'inline-flex';
+  }
 }
 
 
@@ -4955,13 +5033,15 @@ function showPromptConfirm(msg, expectedText, onConfirm) {
   });
 }
 
-function showModal(html, showCancel = true, modalStyle = '') {
+function showModal(html, showCancel = true, modalStyle = '', extraBtn = '') {
   const container = document.getElementById('modal-container');
   container.innerHTML = `
     <div class="modal-backdrop" onclick="closeModal()">
       <div class="modal" style="max-width:700px;${modalStyle}" onclick="event.stopPropagation()">
+        <button class="modal-close-btn" onclick="closeModal()" title="关闭">✕</button>
         ${html}
         <div class="modal-actions">
+          ${extraBtn}
           <button class="btn btn-outline" onclick="closeModal()">关闭</button>
         </div>
       </div>
@@ -4972,6 +5052,12 @@ function closeModal() {
   const container = document.getElementById('modal-container');
   container.innerHTML = '';
   container.style.display = '';
+}
+
+// 移动端答卷查看：题号导航弹出/收起
+function toggleExamRecordNav() {
+  var sidebar = document.querySelector('.exam-record-sidebar');
+  if (sidebar) sidebar.classList.toggle('show-popup');
 }
 
 let examRecordData = null; // 存储当前查看的考试记录数据
